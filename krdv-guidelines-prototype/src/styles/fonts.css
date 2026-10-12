@@ -1,0 +1,191 @@
+@font-face {
+  font-family: "TT Norms Pro";
+  src: url("/fonts/TT-Norms-Pro-Thin.ttf") format("truetype");
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "TT Norms Pro";
+  src: url("/fonts/TT-Norms-Pro-Thin-Italic.ttf") format("truetype");
+  font-weight: 100;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "TT Norms Pro";
+  src: url("/fonts/TT-Norms-Pro-ExtraLight.ttf") format("truetype");
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "TT Norms Pro";
+  src: url("/fonts/TT-Norms-Pro-ExtraLight-Italic.ttf") format("truetype");
+  font-weight: 200;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "TT Norms Pro";
+  src: url("/fonts/TT-Norms-Pro-Light.ttf") format("truetype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "TT Norms Pro";
+  src: url("/fonts/TT-Norms-Pro-Light-Italic.ttf") format("truetype");
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "TT Norms Pro";
+  src: url("/fonts/TT-Norms-Pro-Normal.ttf") format("truetype");
+  font-weight: 350;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "TT Norms Pro";
+  src: url("/fonts/TT-Norms-Pro-Normal-Italic.ttf") format("truetype");
+  font-weight: 350;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "TT Norms Pro";
+  src: url("/fonts/TT-Norms-Pro-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "TT Norms Pro";
+  src: url("/fonts/TT-Norms-Pro-Italic.ttf") format("truetype");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "TT Norms Pro";
+  src: url("/fonts/TT-Norms-Pro-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "TT Norms Pro";
+  src: url("/fonts/TT-Norms-Pro-Medium-Italic.ttf") format("truetype");
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "TT Norms Pro";
+  src: url("/fonts/TT-Norms-Pro-DemiBold.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "TT Norms Pro";
+  src: url("/fonts/TT-Norms-Pro-DemiBold-Italic.ttf") format("truetype");
+  font-weight: 600;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "TT Norms Pro";
+  src: url("/fonts/TT-Norms-Pro-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "TT Norms Pro";
+  src: url("/fonts/TT-Norms-Pro-Bold-Italic.ttf") format("truetype");
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "TT Norms Pro";
+  src: url("/fonts/TT-Norms-Pro-ExtraBold.ttf") format("truetype");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "TT Norms Pro";
+  src: url("/fonts/TT-Norms-Pro-ExtraBold-Italic.ttf") format("truetype");
+  font-weight: 800;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "TT Norms Pro";
+  src: url("/fonts/TT-Norms-Pro-Black.ttf") format("truetype");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "TT Norms Pro";
+  src: url("/fonts/TT-Norms-Pro-Black-Italic.ttf") format("truetype");
+  font-weight: 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "TT Norms Pro";
+  src: url("/fonts/TT-Norms-Pro-ExtraBlack.ttf") format("truetype");
+  font-weight: 950;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "TT Norms Pro";
+  src: url("/fonts/TT-Norms-Pro-ExtraBlack-Italic.ttf") format("truetype");
+  font-weight: 950;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "TT Tsars";
+  src: url("/fonts/TT-Tsars-A-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "TT Tsars";
+  src: url("/fonts/TT-Tsars-A-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}

@@ -1,5 +1,5 @@
 import { spawn } from "node:child_process";
-import { mkdir, rename, stat, unlink } from "node:fs/promises";
+import { mkdir, rename, stat } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import ffmpegPath from "ffmpeg-static";
 
@@ -96,7 +96,3 @@ console.log(
     2,
   ),
 );
-
-try {
-  await unlink(tempTarget);
-} catch {}
