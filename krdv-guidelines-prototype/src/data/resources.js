@@ -1,11 +1,6 @@
 import { regimes, regimeNotes } from "./palette.js";
 
 const downloadResources = {
-  logos: {
-    title: "Логотип АО «КРДВ»",
-    description: "Общий архив с основными версиями логотипа.",
-    url: "https://disk.yandex.ru/client/aa/d_ZPWFtN40OnCecA/",
-  },
   subsidiaryLogos: {
     title: "Логотипы дочерних обществ",
     description: "Архив с логотипами ДО.",
@@ -15,11 +10,6 @@ const downloadResources = {
     title: "Логотипы преференциальных режимов",
     description: "Архив со знаками и логотипами режимов.",
     url: "https://disk.yandex.ru/d/MKhMUbEWmLDgtQ",
-  },
-  businessCards: {
-    title: "Шаблон стандартных визиток",
-    description: "Исходники базовой визитки АО «КРДВ» для русской и английской версии.",
-    url: "https://disk.yandex.ru/client/aa/d_RERxtjr3Ta2Ijw/",
   },
   businessCardsQr: {
     title: "Шаблон визиток с QR",
@@ -54,10 +44,8 @@ const downloadResources = {
 };
 
 const allDownloadResourceKeys = [
-  "logos",
   "subsidiaryLogos",
   "regimeLogos",
-  "businessCards",
   "businessCardsQr",
   "businessCardsSubsidiary",
   "subsidiaryLetterheads",

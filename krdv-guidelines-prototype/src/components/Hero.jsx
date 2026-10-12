@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useRef, useState } from "react";
+import { Component, lazy, Suspense, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { logoAsset, subsidiaryAsset, LOTUS_MARK_PATHS, t, colorHeroTiles, colorHeroHoldDuration, smoothStepEase, colorHeroTileStates, subsidiaryHeroLogos } from "../data/brandbook.js";
 
@@ -208,6 +208,35 @@ const LazyColorPanels = lazy(() =>
   import("@paper-design/shaders-react").then(({ ColorPanels }) => ({ default: ColorPanels })),
 );
 
+// Decorative WebGL is optional. If unavailable, the CSS artwork remains visible.
+function canUseWebGL2() {
+  try {
+    const canvas = document.createElement("canvas");
+    const gl = canvas.getContext("webgl2");
+    if (!gl) return false;
+    const supported = Boolean(gl.getParameter(gl.VERSION));
+    gl.getExtension("WEBGL_lose_context")?.loseContext();
+    return supported;
+  } catch {
+    return false;
+  }
+}
+
+class OptionalShaderBoundary extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { failed: false };
+  }
+
+  static getDerivedStateFromError() {
+    return { failed: true };
+  }
+
+  render() {
+    return this.state.failed ? null : this.props.children;
+  }
+}
+
 function OverviewPanels() {
   const targetRef = useRef(null);
   const [visible, setVisible] = useState(false);
@@ -215,7 +244,15 @@ function OverviewPanels() {
   useEffect(() => {
     const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
     let intersects = false;
-    const sync = () => setVisible(intersects && !preference.matches);
+    let supported;
+    const sync = () => {
+      if (!intersects || preference.matches) {
+        setVisible(false);
+        return;
+      }
+      if (supported === undefined) supported = canUseWebGL2();
+      setVisible(supported);
+    };
     const observer = "IntersectionObserver" in window
       ? new IntersectionObserver(([entry]) => {
           intersects = entry.isIntersecting;
@@ -239,8 +276,9 @@ function OverviewPanels() {
     <div ref={targetRef} className="library-hero-bg is-overview-panels" aria-hidden="true">
       <div className="library-shader-fallback" />
       {visible ? (
-        <Suspense fallback={null}>
-          <LazyColorPanels
+        <OptionalShaderBoundary>
+          <Suspense fallback={null}>
+            <LazyColorPanels
             className="library-shader"
             fit="cover"
             maxPixelCount={2400000}
@@ -256,8 +294,9 @@ function OverviewPanels() {
             edges
             speed={0.16}
             gradient={0.18}
-          />
-        </Suspense>
+            />
+          </Suspense>
+        </OptionalShaderBoundary>
       ) : null}
     </div>
   );

@@ -198,3 +198,22 @@ test("clipboard write denial never reports a successful copy", async ({ page }) 
   await expect(first.locator(".copy-action")).toContainText("Ошибка копирования");
   await expect(first.locator(".copy-action")).not.toContainText("Скопировано");
 });
+
+test("overview shader falls back cleanly when browser WebGL is unavailable", async ({ page }) => {
+  await page.addInitScript(() => {
+    const realGetContext = HTMLCanvasElement.prototype.getContext;
+    HTMLCanvasElement.prototype.getContext = function (type, ...args) {
+      if (["webgl", "webgl2", "experimental-webgl"].includes(type)) return null;
+      return realGetContext.call(this, type, ...args);
+    };
+  });
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  const errors = [];
+  page.on("pageerror", (err) => errors.push(err.message));
+  await page.goto("/#/overview");
+  await ready(page);
+  await expect(page.locator(".hero-band .library-shader-fallback")).toHaveCount(1);
+  await expect(page.locator(".hero-band .library-shader")).toHaveCount(0);
+  await expect(page.locator(".hero-title")).toHaveText("Обзор");
+  expect(errors).toEqual([]);
+});

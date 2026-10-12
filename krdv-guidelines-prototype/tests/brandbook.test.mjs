@@ -111,3 +111,16 @@ test("GitHub Pages production output keeps the /ERDCBB/ asset base", () => {
   const css = readFileSync(path.join(dist, "assets", stylesheet), "utf8");
   assert.ok(css.includes("/ERDCBB/fonts/"), "Brand fonts must resolve under the GitHub Pages prefix");
 });
+
+// Inaccessible internal Yandex Disk folders must never appear as public downloads.
+test("public download resources are accessible share links, not internal login folders", () => {
+  for (const resource of Object.values(downloadResources)) {
+    assert.doesNotMatch(resource.url, /\/client\/aa\//);
+  }
+  assert.equal(downloadResources.logos, undefined);
+  assert.equal(downloadResources.businessCards, undefined);
+  const logoVersions = pagesById.logo.sections.find((section) => section.id === "versions");
+  const businessCard = pagesById.corporate.sections.find((section) => section.id === "business-card");
+  assert.equal(logoVersions.resourceLinks, undefined);
+  assert.equal(businessCard.resourceLinks, undefined);
+});

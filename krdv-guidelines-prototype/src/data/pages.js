@@ -82,7 +82,6 @@ const pagesData = [
           "Русский и английский варианты являются основными видами логотипа. Следует выбирать подходящую версию, учитывая языковую группу аудитории, на которую направлено информационное или рекламное сообщение.",
         ],
         logos: ["ru-horizontal", "ru-square", "en-horizontal", "en-square"],
-        resourceLinks: ["logos"],
       },
       {
         id: "usage",
@@ -323,7 +322,6 @@ const pagesData = [
           { title: "Русская визитка", caption: "Основной вариант для деловой коммуникации внутри России.", file: "business-card-ru.png" },
           { title: "Английская визитка", caption: "Версия для международных встреч и англоязычных контактов.", file: "business-card-en.png" },
         ],
-        resourceLinks: ["businessCards"],
       },
       {
         id: "qr-card",
