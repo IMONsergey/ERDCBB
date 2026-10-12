@@ -192,138 +192,6 @@
   line-height: 1.35;
 }
 
-.font-current-file {
-  display: grid;
-  gap: 8px;
-  border-top: 1px solid var(--line);
-  padding-top: 12px;
-}
-
-.font-download-library {
-  display: grid;
-  gap: 12px;
-}
-
-.font-download-family {
-  display: grid;
-  grid-template-columns: minmax(210px, 0.24fr) minmax(0, 1fr);
-  border: 1px solid var(--line);
-  background: #ffffff;
-}
-
-.font-download-family > div:first-child {
-  display: grid;
-  align-content: start;
-  gap: 10px;
-  border-right: 1px solid var(--line);
-  padding: 18px;
-}
-
-.font-download-family h3 {
-  margin: 0;
-  font-size: 20px;
-  line-height: 1.08;
-  font-weight: 400;
-}
-
-.font-download-family p {
-  margin: 0;
-}
-
-.font-file-grid {
-  min-width: 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(142px, 1fr));
-  border-left: 1px solid var(--line);
-  margin-left: -1px;
-}
-
-.font-file-link {
-  min-width: 0;
-  min-height: 44px;
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
-  align-items: center;
-  gap: 9px;
-  border-right: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
-  padding: 10px 12px;
-  color: #050505;
-  text-decoration: none;
-  transition: background var(--motion-fast) var(--ease-standard), color var(--motion-fast) var(--ease-standard);
-}
-
-.font-file-link:hover,
-.font-file-link:focus-visible {
-  background: var(--soft);
-}
-
-.font-file-link span {
-  min-width: 0;
-  overflow: hidden;
-  color: #050505;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.font-file-link em {
-  color: var(--muted);
-  font-style: normal;
-}
-
-.font-file-link.is-compact {
-  min-height: 38px;
-  border-right: 0;
-  border-bottom: 0;
-  border-top: 1px solid var(--line);
-}
-
-.font-file-icon {
-  width: 16px;
-  height: 16px;
-}
-
-.font-archive-link {
-  width: 100%;
-  min-height: 86px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 24px;
-  border: 1px solid var(--line-active);
-  padding: 22px 24px;
-  background: var(--blue);
-  color: #ffffff;
-  text-decoration: none;
-  transition: background var(--motion-standard) var(--ease), transform var(--motion-standard) var(--ease);
-}
-
-.font-archive-link:hover,
-.font-archive-link:focus-visible {
-  background: var(--blue);
-  transform: translateY(-2px);
-}
-
-.font-archive-link span {
-  display: grid;
-  gap: 8px;
-}
-
-.font-archive-link strong {
-  font-size: 24px;
-  line-height: 1.08;
-  font-weight: 400;
-}
-
-.font-archive-link em {
-  color: rgba(255, 255, 255, 0.72);
-}
-
-.font-archive-icon {
-  width: 24px;
-  height: 24px;
-}
-
 .directory-copy {
   grid-template-rows: auto minmax(0, 1fr) auto;
   align-content: stretch;
@@ -536,26 +404,44 @@
 
 .contact-block {
   display: grid;
-  gap: 12px;
+  align-content: start;
+  gap: 18px;
   width: 100%;
   margin: 0;
   border: 1px solid var(--line);
-  padding: 24px;
+  padding: clamp(22px, 3vw, 36px);
   background: #0056a2;
   color: #ffffff;
   font-style: normal;
-  transition: transform var(--motion-standard) var(--ease), background var(--motion-standard) var(--ease);
 }
 
-.contact-block:hover {
-  background: #004a8b;
-  transform: translateY(-2px);
+.contact-block strong {
+  max-width: 700px;
+  font-size: clamp(20px, 2vw, 28px);
+  line-height: 1.2;
+  font-weight: 400;
 }
 
-.contact-block span {
-  display: block;
-  font-size: 24px;
-  line-height: 1.18;
+.contact-block a {
+  width: fit-content;
+  color: #ffffff;
+  font-size: 18px;
+  text-underline-offset: 4px;
+  text-decoration-color: rgba(255, 255, 255, 0.45);
+  transition: text-decoration-color var(--motion-fast) ease;
+}
+
+.contact-block a:hover,
+.contact-block a:focus-visible {
+  text-decoration-color: #ffffff;
+}
+
+.contact-block small {
+  margin-top: 12px;
+  color: rgba(255, 255, 255, 0.78);
+  font-family: var(--mono);
+  font-size: 12px;
+  line-height: 1.4;
 }
 
 .contact-cta {

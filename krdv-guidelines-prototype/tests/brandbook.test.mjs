@@ -4,7 +4,7 @@ import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
 import { pagesData, pagesById, resolvePageId, routeAliases } from "../src/data/pages.js";
-import { downloadResources, logoVariants, subsidiaryLogos, regimeSignLogos, madeSignVariants, fontFamilies, fontArchive } from "../src/data/resources.js";
+import { downloadResources, logoVariants, subsidiaryLogos, regimeSignLogos, madeSignVariants, fontFamilies } from "../src/data/resources.js";
 import { typograf } from "../src/lib/typograf.js";
 const publicRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../public");
 function asset(relativeFile) {
@@ -46,7 +46,6 @@ test("all downloadable logos, marks, fonts, imagery and videos exist", () => {
     for (const file of Object.values(item.files)) asset(prefix + file);
   }
   for (const family of fontFamilies) for (const file of family.files) asset("fonts/" + file.file);
-  asset("downloads/" + fontArchive.file);
   for (const page of pagesData) {
     if (page.heroVideo) {
       asset("assets/hero/" + page.heroVideo);
@@ -70,6 +69,24 @@ test("external resource links have unique HTTPS URLs", () => {
   });
   assert.equal(urls.length, new Set(urls).size);
 });
+test("approved editorial changes are represented in the page data", () => {
+  assert.equal(pagesById.regimes.directoryTitle, "Преференциальные режимы");
+  assert.equal(pagesById.logo.sections.find((s) => s.id === "full").logos.includes("mark"), false);
+  assert.equal(logoVariants["ru-square"].role, "Основная версия");
+  assert.equal(logoVariants["ru-horizontal"].role, "Дополнительная версия");
+  assert.equal(logoVariants["en-square"].role, "Основная международная версия");
+  assert.equal(logoVariants["en-horizontal"].role, "Дополнительная международная версия");
+  assert.equal(pagesById.positioning.sections.find((s) => s.id === "principles").cards, undefined);
+  assert.equal(pagesById.typography.sections.some((s) => s.id === "font-files"), false);
+  assert.equal(pagesById.advertising.sections.some((s) => s.id === "presswall"), false);
+  assert.equal(pagesById.appendix.sections.find((s) => s.id === "social").assetImages, undefined);
+  assert.equal(pagesById.appendix.sections.find((s) => s.id === "contacts").contacts.updatedAt, "2026-11-01");
+  assert.equal(pagesById.photostyle.sections.find((s) => s.id === "events").photoCredit.author, "Максим Блинов");
+  for (const page of pagesData) {
+    assert.ok(page.directoryDescription?.length > 15 && page.directoryDescription.length < 100);
+  }
+});
+
 test("Russian typographic rules preserve meaning", () => {
   assert.equal(typograf("АО КРДВ"), "АО\u00a0КРДВ");
   assert.equal(typograf("10 кг"), "10\u00a0кг");

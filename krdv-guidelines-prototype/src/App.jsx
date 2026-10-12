@@ -15,7 +15,13 @@ function App() {
   );
   const menuButtonRef = useRef(null);
   const sidebarRef = useRef(null);
-  const [showPreloader, setShowPreloader] = useState(true);
+  const [showPreloader, setShowPreloader] = useState(() => {
+    if (typeof window === "undefined") return false;
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    // Only the un-routed landing page receives the optional intro.
+    // All deep links and reduced-motion environments display content immediately.
+    return !reducedMotion && window.location.hash === "";
+  });
   const activePage = pagesById[activePageId] || pagesById.overview;
 
   useEffect(() => {
@@ -67,10 +73,10 @@ function App() {
   }, [isMobile, menuOpen]);
 
   useEffect(() => {
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const timeout = window.setTimeout(() => setShowPreloader(false), reducedMotion ? 260 : 1650);
+    if (!showPreloader) return undefined;
+    const timeout = window.setTimeout(() => setShowPreloader(false), 1100);
     return () => window.clearTimeout(timeout);
-  }, []);
+  }, [showPreloader]);
 
   useEffect(() => {
     const onHashChange = () => {

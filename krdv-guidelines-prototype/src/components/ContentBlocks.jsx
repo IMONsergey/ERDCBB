@@ -1,7 +1,7 @@
 import { copyText } from "../lib/clipboard.js";
 import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, LayoutGroup, motion } from "motion/react";
-import { rasterAsset, fontAsset, downloadAsset, ICONS, t, fontFamilies, isDesktopFontFile, downloadableFontFamilies, fontArchive, pagesData } from "../data/brandbook.js";
+import { rasterAsset, ICONS, t, fontFamilies, pagesData } from "../data/brandbook.js";
 import { UiIcon } from "./UiIcon.jsx";
 
 function RuleList({ items }) {
@@ -125,7 +125,6 @@ function FontWorkbench() {
   const [previewSize, setPreviewSize] = useState(64);
   const [sample, setSample] = useState(selectedFamily.sample);
   const selectedStyle = selectedFamily.files[styleIndex] || selectedFamily.files[0];
-  const canDownloadSelected = selectedStyle && isDesktopFontFile(selectedStyle);
   const fallback = selectedFamily.id === "tsars" || selectedFamily.id === "serif" ? "Georgia, serif" : "Arial, sans-serif";
   const preferredStyles = ["Regular", "Medium", "DemiBold", "Bold", "Black"];
   const styleOptions = selectedFamily.files.filter((file) => preferredStyles.includes(file.label) || file.file === selectedStyle?.file);
@@ -219,75 +218,9 @@ function FontWorkbench() {
           />
         </label>
 
-        {canDownloadSelected ? (
-          <div className="font-current-file">
-            <span>{t("Скачать выбранное начертание")}</span>
-            <FontFileLink file={selectedStyle} familyTitle={selectedFamily.title} compact />
-          </div>
-        ) : null}
       </div>
     </div>
   );
-}
-
-function FontDownloadLibrary() {
-  return (
-    <div className="font-download-library">
-      {downloadableFontFamilies.map((family) => (
-        <section className="font-download-family" key={family.id}>
-          <div>
-            <span>{t(family.role)}</span>
-            <h3>{family.title}</h3>
-            <p>{t(`${family.files.length} ${pluralizeFontFiles(family.files.length)} доступно для скачивания.`)}</p>
-          </div>
-          <div className="font-file-grid">
-            {family.files.map((file) => (
-              <FontFileLink key={file.file} file={file} familyTitle={family.title} />
-            ))}
-          </div>
-        </section>
-      ))}
-
-      <a className="font-archive-link" href={downloadAsset(fontArchive.file)} download={fontArchive.file}>
-        <span>
-          <strong>{t("Скачать весь архив шрифтов")}</strong>
-          <em>{t(`${fontArchive.count} ${pluralizeFontFiles(fontArchive.count)} · ZIP`)}</em>
-        </span>
-        <UiIcon icon={ICONS.download} className="font-archive-icon" />
-      </a>
-    </div>
-  );
-}
-
-function FontFileLink({ file, familyTitle, compact = false }) {
-  const [active, setActive] = useState(false);
-  const extension = file.file.split(".").pop()?.toUpperCase() || "FONT";
-
-  return (
-    <a
-      className={`font-file-link ${compact ? "is-compact" : ""}`}
-      href={fontAsset(file.file)}
-      download={file.file}
-      onBlur={() => setActive(false)}
-      onFocus={() => setActive(true)}
-      onMouseEnter={() => setActive(true)}
-      onMouseLeave={() => setActive(false)}
-      aria-label={t(`Скачать ${familyTitle} ${file.label}`)}
-    >
-      <UiIcon icon={active ? ICONS.arrowDown : ICONS.download} className="font-file-icon" />
-      <span>{file.label}</span>
-      <em>{extension}</em>
-    </a>
-  );
-}
-
-function pluralizeFontFiles(count) {
-  const lastTwo = count % 100;
-  const last = count % 10;
-  if (lastTwo >= 11 && lastTwo <= 14) return "файлов";
-  if (last === 1) return "файл";
-  if (last >= 2 && last <= 4) return "файла";
-  return "файлов";
 }
 
 function RegimePalette({ items }) {
@@ -366,9 +299,9 @@ function TypografDemo() {
 function ContactBlock({ items }) {
   return (
     <address className="contact-block">
-      {items.map((item) => (
-        <span key={item}>{t(item)}</span>
-      ))}
+      <strong>{t(items.organization)}</strong>
+      <a href={"https://" + items.website} target="_blank" rel="noopener noreferrer">{items.website}</a>
+      <small>{t("Руководство обновлено")} <time dateTime={items.updatedAt}>{items.updatedLabel}</time></small>
     </address>
   );
 }
@@ -418,4 +351,4 @@ function EndLinks({ activePageId, navigate }) {
   );
 }
 
-export { RuleList, SpecGrid, PaletteGrid, TypeSpecimens, FontWorkbench, FontDownloadLibrary, RegimePalette, TypografDemo, ContactBlock, ContactCta, EndLinks };
+export { RuleList, SpecGrid, PaletteGrid, TypeSpecimens, FontWorkbench, RegimePalette, TypografDemo, ContactBlock, ContactCta, EndLinks };

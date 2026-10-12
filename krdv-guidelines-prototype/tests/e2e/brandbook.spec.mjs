@@ -109,3 +109,62 @@ test("decorative hero playback resumes with motion permitted", async ({ page }) 
   await page.waitForTimeout(900);
   await expect.poll(() => video.evaluate((el) => !el.paused), { timeout: 7_000 }).toBe(true);
 });
+
+test("requested editorial cleanup is reflected on all affected pages", async ({ page }) => {
+  await page.goto("/#/overview");
+  await ready(page);
+  await expect(page.locator(".intro-panel")).toContainText("Руководство по визуальной системе");
+  await expect(page.locator("#guide .keyword-wall")).toHaveCount(0);
+  await expect(page.locator("#contents .lead-copy")).toContainText("Руководство по использованию фирменного стиля");
+  await expect(page.locator("#contents .directory-copy h3")).toContainText(["Обзор", "Позиционирование", "Логотип", "Дочерние общества", "Преференциальные режимы"]);
+  // Snapshot all summaries atomically; positional locators can drift during layout transitions.
+  const summaries = await page.locator("#contents .directory-copy p").evaluateAll(nodes =>
+    nodes.map(node => ({
+      text: node.textContent,
+      width: node.clientWidth,
+      scrollWidth: node.scrollWidth,
+    }))
+  );
+  expect(summaries).toHaveLength(14);
+  for (const summary of summaries) {
+    expect(summary.text).not.toContain("...");
+    expect(summary.scrollWidth).toBeLessThanOrEqual(summary.width + 1);
+  }
+
+  await page.goto("/#/positioning");
+  await ready(page);
+  await expect(page.locator(".positioning-principles, #principles .info-card")).toHaveCount(0);
+
+  await page.goto("/#/logo");
+  await ready(page);
+  await expect(page.locator(".intro-panel")).toContainText("Правила работы с логотипом");
+  await expect(page.locator("#full .logo-card")).toHaveCount(2);
+  await expect(page.locator("#full .logo-card").first().locator(".logo-card-copy > span")).toHaveText("Дополнительная версия");
+  await expect(page.locator("#full .logo-card").nth(1).locator(".logo-card-copy > span")).toHaveText("Основная версия");
+  await expect(page.locator("#versions .logo-card")).toHaveCount(4);
+  await expect(page.locator("#versions .logo-card").nth(2).locator(".logo-card-copy > span")).toContainText("Дополнительная");
+  await expect(page.locator("#versions .logo-card").nth(3).locator(".logo-card-copy > span")).toContainText("Основная");
+
+  await page.goto("/#/typography");
+  await ready(page);
+  await expect(page.locator("#font-files, .font-current-file, .font-download-library")).toHaveCount(0);
+
+  await page.goto("/#/advertising");
+  await ready(page);
+  await expect(page.locator("#presswall")).toHaveCount(0);
+
+  await page.goto("/#/photostyle");
+  await ready(page);
+  await expect(page.locator("#events .asset-image-card")).toHaveCount(2);
+  await expect(page.locator("#events .photo-credit")).toContainText("Автор фото:");
+  await expect(page.locator("#events .photo-credit")).toContainText("Максим Блинов");
+  await expect(page.locator("#events .photo-credit")).toContainText("Фотохост-агентство РИА Новости");
+
+  await page.goto("/#/appendix");
+  await ready(page);
+  await expect(page.locator(".intro-panel")).toContainText("Гайд по оформлению публикаций в соцсетях");
+  await expect(page.locator("#social .asset-image-grid")).toHaveCount(0);
+  await expect(page.locator("#contacts .contact-block")).toContainText("erdc.ru");
+  await expect(page.locator("#contacts .contact-block time")).toHaveAttribute("datetime", "2026-11-01");
+  await expect(page.locator("#contacts .contact-block time")).toHaveText("01.11.2026");
+});

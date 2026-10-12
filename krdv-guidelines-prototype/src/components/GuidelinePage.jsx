@@ -1,10 +1,10 @@
 import { SmartVideo } from "./SmartVideo.jsx";
 import { LayoutGroup, motion } from "motion/react";
-import { ICONS, t, positioningPrinciples, pagesData } from "../data/brandbook.js";
+import { ICONS, t, pagesData } from "../data/brandbook.js";
 import { HeroLogoLockup, ColorHeroAnimation, SubsidiaryHeroAnimation, LibraryHeroBackground } from "./Hero.jsx";
 import { UiIcon } from "./UiIcon.jsx";
 import { LogoLibrary, SubsidiaryLogoLibrary, RegimeSignLibrary, MadeSignLibrary, ResourceLinks, AssetImageGrid } from "./AssetLibraries.jsx";
-import { RuleList, SpecGrid, PaletteGrid, TypeSpecimens, FontWorkbench, FontDownloadLibrary, RegimePalette, TypografDemo, ContactBlock, ContactCta, EndLinks } from "./ContentBlocks.jsx";
+import { RuleList, SpecGrid, PaletteGrid, TypeSpecimens, FontWorkbench, RegimePalette, TypografDemo, ContactBlock, ContactCta, EndLinks } from "./ContentBlocks.jsx";
 
 function GuidelinePage({ page, activePageId, navigate }) {
   const hasMediaHero = Boolean(page.heroVideo);
@@ -64,12 +64,17 @@ function ContentSection({ section, navigate, activePageId }) {
         {section.palette ? <PaletteGrid colors={section.palette} /> : null}
         {section.typeSamples ? <TypeSpecimens items={section.typeSamples} /> : null}
         {section.fontWorkbench ? <FontWorkbench /> : null}
-        {section.fontDownloads ? <FontDownloadLibrary /> : null}
         {section.regimePalette ? <RegimePalette items={section.regimePalette} /> : null}
         {section.regimeSigns ? <RegimeSignLibrary /> : null}
         {section.madeSigns ? <MadeSignLibrary /> : null}
         {section.assetImages ? <AssetImageGrid items={section.assetImages} mode={section.assetImageMode} /> : null}
         {cardsAfterAssets ? <CardGrid items={section.cards} /> : null}
+        {section.photoCredit ? (
+          <footer className="photo-credit" aria-label={t("Сведения об авторе фотографии")}>
+            <span>{t("Автор фото:")} <strong>{t(section.photoCredit.author)}</strong></span>
+            <span>{t("Источник:")} {t(section.photoCredit.source)}</span>
+          </footer>
+        ) : null}
         {section.resourceLinks ? <ResourceLinks keys={section.resourceLinks} /> : null}
         {section.typografDemo ? <TypografDemo /> : null}
         {section.contacts ? <ContactBlock items={section.contacts} /> : null}
@@ -130,16 +135,6 @@ function PositioningShowcase() {
             <em key={tag}>{t(tag)}</em>
           ))}
         </div>
-        <p>{t("Смысловые пары помогают говорить о территориях через конкретное движение: проекты, людей, инфраструктуру, карьеру и понятную пользу для резидентов.")}</p>
-      </div>
-      <div className="positioning-principles">
-        {positioningPrinciples.map((item, index) => (
-          <motion.article key={item.title} whileHover={{ y: -2 }} style={{ "--principle-index": index }}>
-            <span>{`0${index + 1}`}</span>
-            <h3>{t(item.title)}</h3>
-            <p>{t(item.text)}</p>
-          </motion.article>
-        ))}
       </div>
     </div>
   );
@@ -166,17 +161,17 @@ function SectionDirectory({ navigate, activePageId }) {
               whileHover={{ y: -2 }}
               whileTap={{ scale: 0.992 }}
               aria-current={isCurrent ? "page" : undefined}
-              aria-label={t(`Открыть раздел ${page.title}`)}
+              aria-label={t("Открыть раздел " + (page.directoryTitle || page.title))}
             >
-              <div className={`directory-visual ${hasCover || hasMotionCover || hasLibraryCover ? "has-cover" : ""} ${hasMotionCover ? "has-motion-cover" : ""} ${hasLibraryCover ? "has-library-cover" : ""}`} aria-hidden="true">
+              <div data-topic={page.id} className={`directory-visual ${hasCover || hasMotionCover || hasLibraryCover ? "has-cover" : ""} ${hasMotionCover ? "has-motion-cover" : ""} ${hasLibraryCover ? "has-library-cover" : ""}`} aria-hidden="true">
                 {page.heroVideo ? <SmartVideo className="directory-video" filename={page.heroVideo} /> : null}
                 {hasMotionCover ? <ColorHeroAnimation /> : null}
                 {hasLibraryCover ? <LibraryHeroBackground variant={page.heroLibrary} miniature /> : null}
                 {hasCover || hasMotionCover || hasLibraryCover ? null : <div className="directory-fallback" />}
               </div>
               <div className="directory-copy">
-                <h3>{t(page.title)}</h3>
-                <p>{t(page.intro)}</p>
+                <h3>{t(page.directoryTitle || page.title)}</h3>
+                <p>{t(page.directoryDescription || page.intro)}</p>
                 <small>
                   <span>{t("Открыть раздел")}</span>
                   <UiIcon icon={ICONS.arrowRight} className="directory-arrow" />

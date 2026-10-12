@@ -176,7 +176,6 @@
   .example-grid,
   .card-grid,
   .section-directory,
-  .positioning-principles,
   .rule-list,
   .spec-grid,
   .logo-library,
@@ -189,8 +188,6 @@
   .regime-palette,
   .palette-grid,
   .font-workbench,
-  .font-download-family,
-  .font-file-grid,
   .typograf-demo,
   .end-links {
     grid-template-columns: 1fr;
@@ -241,10 +238,6 @@
   .positioning-promise strong {
     margin-top: 18px;
     font-size: 40px;
-  }
-
-  .positioning-promise p {
-    grid-column: auto;
   }
 
   .directory-copy h3 {

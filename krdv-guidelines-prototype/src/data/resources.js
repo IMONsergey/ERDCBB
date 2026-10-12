@@ -134,21 +134,11 @@ const fontFamilies = [
   },
 ];
 
-const isDesktopFontFile = (fontFile) => /\.(ttf|otf)$/i.test(fontFile.file);
-const downloadableFontFamilies = fontFamilies
-  .map((family) => ({ ...family, files: family.files.filter(isDesktopFontFile) }))
-  .filter((family) => family.files.length > 0);
-const fontArchive = {
-  title: "Все шрифты КРДВ",
-  file: "krdv-fonts.zip",
-  count: downloadableFontFamilies.reduce((total, family) => total + family.files.length, 0),
-};
-
 const logoVariants = {
   "ru-horizontal": {
     title: "Русская горизонтальная версия",
-    role: "Основная версия",
-    description: "Используется в русскоязычных материалах, когда есть достаточно горизонтального пространства и логотип должен читаться как главный идентификатор.",
+    role: "Дополнительная версия",
+    description: "Дополнительная горизонтальная компоновка для широких носителей с ограниченной высотой.",
     preview: "krdv-logo-ru-horizontal.svg",
     kind: "horizontal",
     files: {
@@ -161,8 +151,8 @@ const logoVariants = {
   },
   "ru-square": {
     title: "Русская вертикальная версия",
-    role: "Дополнительная версия",
-    description: "Подходит для компактных зон, вертикальных композиций, карточек и носителей, где горизонтальная версия теряет масштаб.",
+    role: "Основная версия",
+    description: "Основная фирменная компоновка для деловых, цифровых и рекламных материалов.",
     preview: "krdv-logo-ru-square.svg",
     kind: "square",
     files: {
@@ -175,8 +165,8 @@ const logoVariants = {
   },
   "en-horizontal": {
     title: "Английская горизонтальная версия",
-    role: "Основная международная версия",
-    description: "Используется для англоязычных ресурсов, международных мероприятий и материалов для зарубежной аудитории.",
+    role: "Дополнительная международная версия",
+    description: "Дополнительная горизонтальная компоновка для англоязычных материалов.",
     preview: "krdv-logo-en-horizontal.svg",
     kind: "horizontal",
     files: {
@@ -189,8 +179,8 @@ const logoVariants = {
   },
   "en-square": {
     title: "Английская вертикальная версия",
-    role: "Дополнительная международная версия",
-    description: "Используется в международных коммуникациях, когда нужен компактный вертикальный знак с англоязычным написанием.",
+    role: "Основная международная версия",
+    description: "Основная англоязычная компоновка для международных коммуникаций.",
     preview: "krdv-logo-en-square.svg",
     kind: "square",
     files: {
@@ -199,17 +189,6 @@ const logoVariants = {
       jpg: "krdv-logo-en-square.jpg",
       pdf: "krdv-logo-en-square.pdf",
       eps: "krdv-logo-en-square.eps",
-    },
-  },
-  mark: {
-    title: "Фирменный знак лотоса",
-    role: "Знак",
-    description: "Самостоятельное использование знака требует согласования. В системе он показан как часть состава логотипа и как отдельный графический источник.",
-    preview: "krdv-mark-lotus.svg",
-    kind: "mark",
-    inlineDownloads: true,
-    files: {
-      svg: "krdv-mark-lotus.svg",
     },
   },
 };
@@ -343,7 +322,6 @@ const photostyleImages = {
   events: [
     { title: "Деловой стенд", caption: "Коммуникационный кадр с выставки или форума.", file: "photostyle-composition-6.webp" },
     { title: "Вовлеченная аудитория", caption: "Событие с участниками, которые включены в процесс.", file: "photostyle-composition-7.webp" },
-    { title: "Выступление", caption: "Кадр выступления с живой аудиторией и понятным контекстом.", file: "photostyle-composition-8.webp" },
   ],
   nature: [
     { title: "Полярное сияние", caption: "Захватывающий природный кадр Арктики.", file: "photostyle-composition-10.webp" },
@@ -358,10 +336,6 @@ const photostyleImages = {
   ],
 };
 
-const appendixSocialImages = [
-  { title: "Публикация", caption: "Композиция для основного поста с фирменной графикой и текстовым блоком.", file: "appendix-social-1.webp", wide: true },
-  { title: "Карточка с персоной", caption: "Формат для спикера, эксперта или героя материала.", file: "appendix-social-2.webp", contained: true },
-];
 
 const logoMisuseImages = [
   { title: "Старые версии", caption: "Запрещено использовать старые версии логотипа.", file: "logo-misuse-1.png" },
@@ -378,4 +352,4 @@ const logoBackgroundRuleImages = Array.from({ length: 8 }, (_, index) => ({
   embeddedText: true,
 }));
 
-export { downloadResources, allDownloadResourceKeys, logoFormats, regimeSignFormats, subsidiaryFormats, madeSignFormats, fontFamilies, isDesktopFontFile, downloadableFontFamilies, fontArchive, logoVariants, subsidiaryLogos, subsidiaryLogoSets, regimeSignLogos, madeSignVariants, madeBrandingImages, photostyleImages, appendixSocialImages, logoMisuseImages, logoBackgroundRuleImages };
+export { downloadResources, allDownloadResourceKeys, logoFormats, regimeSignFormats, subsidiaryFormats, madeSignFormats, fontFamilies, logoVariants, subsidiaryLogos, subsidiaryLogoSets, regimeSignLogos, madeSignVariants, madeBrandingImages, photostyleImages, logoMisuseImages, logoBackgroundRuleImages };
