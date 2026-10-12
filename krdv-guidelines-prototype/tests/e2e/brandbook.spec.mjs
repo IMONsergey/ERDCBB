@@ -69,8 +69,23 @@ test("mobile navigation is keyboard-operable and focus returns on Escape", async
   await expect(toggle).toBeFocused();
 });
 
-test("color swatches only report copy success after clipboard write", async ({ page, context }) => {
-  await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+test("color swatches only report copy success after clipboard write", async ({ page, context, browserName }) => {
+  if (browserName === "chromium") {
+    // Verify the native clipboard implementation on Chromium.
+    await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+  } else {
+    // Firefox/WebKit handle clipboard permissions differently. Exercise the same
+    // app write/read contract with a deterministic browser-side clipboard.
+    await page.addInitScript(() => {
+      Object.defineProperty(navigator, "clipboard", {
+        configurable: true,
+        value: {
+          writeText: async (text) => { window.__qaCopiedText = String(text); },
+          readText: async () => window.__qaCopiedText || "",
+        },
+      });
+    });
+  }
   await page.goto("/#/color");
   await ready(page);
   const first = page.locator(".palette-grid button").first();
@@ -167,4 +182,19 @@ test("requested editorial cleanup is reflected on all affected pages", async ({ 
   await expect(page.locator("#contacts .contact-block")).toContainText("erdc.ru");
   await expect(page.locator("#contacts .contact-block time")).toHaveAttribute("datetime", "2026-11-01");
   await expect(page.locator("#contacts .contact-block time")).toHaveText("01.11.2026");
+});
+
+test("clipboard write denial never reports a successful copy", async ({ page }) => {
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, "clipboard", {
+      configurable: true,
+      value: { writeText: async () => { throw new Error("Clipboard permission denied"); } },
+    });
+  });
+  await page.goto("/#/color");
+  await ready(page);
+  const first = page.locator(".palette-grid button").first();
+  await first.click();
+  await expect(first.locator(".copy-action")).toContainText("Ошибка копирования");
+  await expect(first.locator(".copy-action")).not.toContainText("Скопировано");
 });

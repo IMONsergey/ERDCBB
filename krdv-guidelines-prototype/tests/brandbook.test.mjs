@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { existsSync, readFileSync, statSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
@@ -99,4 +99,15 @@ test("primary artwork SVG is not raster content in disguise", () => {
     assert.ok(svg.includes("<svg"), file);
     assert.ok(!/<image\b|data:image\//i.test(svg), file);
   }
+});
+
+test("GitHub Pages production output keeps the /ERDCBB/ asset base", () => {
+  if (process.env.GITHUB_PAGES !== "true") return;
+  const dist = path.resolve(publicRoot, "../dist/client");
+  const html = readFileSync(path.join(dist, "index.html"), "utf8");
+  assert.match(html, /\/ERDCBB\/assets\/index-[^"']+\.js/);
+  const stylesheet = readdirSync(path.join(dist, "assets")).find((entry) => /^index-.*\.css$/.test(entry));
+  assert.ok(stylesheet, "Missing production stylesheet");
+  const css = readFileSync(path.join(dist, "assets", stylesheet), "utf8");
+  assert.ok(css.includes("/ERDCBB/fonts/"), "Brand fonts must resolve under the GitHub Pages prefix");
 });

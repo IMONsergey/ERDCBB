@@ -21,7 +21,7 @@ npm run test:e2e
 ```
 
 - `npm run check`: production build, проверки контента и ассетов, тесты Sites Worker.
-- `npm run test:e2e`: Playwright Chromium, desktop и mobile, все 14 страниц, навигация, история, скролл, палитры и анимации.
+- `npm run test:e2e`: Playwright Chromium, Firefox, WebKit и эмуляция iOS; 14 страниц, навигация, скролл, палитры, работа анимаций и ошибки доступа к буферу обмена.
 - `GITHUB_PAGES=true npm run build`: production build с базовым URL /ERDCBB/.
 - `npm run optimize:video`: отдельная команда обработки видео (не запускается при обычной сборке).
 
@@ -43,7 +43,7 @@ npm run test:e2e
 
 ## Публикация
 
-Ветка `main` публикуется на GitHub Pages по существующему GitHub Actions workflow. Сейчас он выполняет сборку, но **не запускает полный набор проверок и E2E**. Перед merge необходимо выполнить `npm run check` и `npm run test:e2e` вручную или в CI. Подключение отдельного workflow качества требует разрешения GitHub `workflow`; пока такого разрешения нет. Прямой деплой без проверки в `main` не рекомендуется.
+Quality checks запускает линтер, production-сборку, модульные и браузерные тесты (Chromium/Firefox/WebKit) до объединения PR. Workflow GitHub Pages повторяет эти проверки перед публикацией, поэтому не прошедшая проверку сборка не выкладывается. Публиковать в `main` следует после успешного CI.
 
 Текущая карта: [brandbook-map.md](krdv-guidelines-prototype/brandbook-map.md). Актуальные ограничения: [design-qa.md](krdv-guidelines-prototype/design-qa.md).
 

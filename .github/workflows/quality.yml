@@ -12,7 +12,7 @@ jobs:
   verify:
     name: Build, content and browser QA
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 35
     defaults:
       run:
         working-directory: krdv-guidelines-prototype
@@ -25,11 +25,13 @@ jobs:
           cache-dependency-path: krdv-guidelines-prototype/package-lock.json
       - name: Install dependencies
         run: npm ci
-      - name: Lint, build and unit tests
+      - name: Lint, production build and unit tests
+        env:
+          GITHUB_PAGES: "true"
         run: npm run check
-      - name: Install Chromium and system dependencies
-        run: npx playwright install --with-deps chromium
-      - name: Desktop and mobile browser tests
+      - name: Install Chromium, Firefox and WebKit
+        run: npx playwright install --with-deps chromium firefox webkit
+      - name: Desktop and mobile cross-browser tests
         run: npm run test:e2e -- --workers=2 --reporter=line
       - name: Upload failure diagnostics
         if: failure()

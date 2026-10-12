@@ -17,6 +17,9 @@ export default defineConfig({
   projects: [
     { name: "desktop", use: { ...devices["Desktop Chrome"], viewport: { width: 1440, height: 900 } } },
     { name: "mobile", use: { ...devices["iPhone 13"], browserName: "chromium" } },
+    { name: "firefox", use: { ...devices["Desktop Firefox"], viewport: { width: 1440, height: 900 } } },
+    { name: "webkit", use: { ...devices["Desktop Safari"], viewport: { width: 1440, height: 900 } } },
+    { name: "ios-webkit", use: { ...devices["iPhone 13"], browserName: "webkit" } },
   ],
   webServer: {
     command: "npm run dev -- --host 127.0.0.1 --port 49261 --strictPort",
