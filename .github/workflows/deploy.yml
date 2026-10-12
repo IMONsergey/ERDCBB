@@ -18,6 +18,7 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 35
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -33,11 +34,19 @@ jobs:
         working-directory: krdv-guidelines-prototype
         run: npm ci
 
-      - name: Build
+      - name: Production build, lint and unit tests
         working-directory: krdv-guidelines-prototype
         env:
           GITHUB_PAGES: "true"
-        run: npm run build
+        run: npm run check
+
+      - name: Install Chromium, Firefox and WebKit
+        working-directory: krdv-guidelines-prototype
+        run: npx playwright install --with-deps chromium firefox webkit
+
+      - name: Browser QA before release
+        working-directory: krdv-guidelines-prototype
+        run: npm run test:e2e -- --workers=2 --reporter=line
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

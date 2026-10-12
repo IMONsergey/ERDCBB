@@ -1,0 +1,45 @@
+name: Quality checks
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Build, content and browser QA
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    defaults:
+      run:
+        working-directory: krdv-guidelines-prototype
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: krdv-guidelines-prototype/package-lock.json
+      - name: Install dependencies
+        run: npm ci
+      - name: Lint, production build and unit tests
+        env:
+          GITHUB_PAGES: "true"
+        run: npm run check
+      - name: Install Chromium, Firefox and WebKit
+        run: npx playwright install --with-deps chromium firefox webkit
+      - name: Desktop and mobile cross-browser tests
+        run: npm run test:e2e -- --workers=2 --reporter=line
+      - name: Upload failure diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: erdcbb-playwright-failure
+          path: |
+            krdv-guidelines-prototype/test-results/
+            krdv-guidelines-prototype/playwright-report/
+          retention-days: 7
+          if-no-files-found: ignore

@@ -15,3 +15,7 @@ krdv-guidelines-prototype/.playwright-cli/
 # Logs.
 *.log
 npm-debug.log*
+
+# Browser testing artifacts.
+krdv-guidelines-prototype/playwright-report/
+krdv-guidelines-prototype/test-results/

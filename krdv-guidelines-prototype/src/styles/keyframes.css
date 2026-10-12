@@ -1,0 +1,141 @@
+@keyframes pageEnter {
+  from {
+    opacity: 0.96;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes routeOut {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0.72;
+  }
+}
+
+@keyframes lotusContourTrace {
+  0% {
+    opacity: 0.14;
+    stroke-dashoffset: 1;
+  }
+
+  34% {
+    opacity: 0.98;
+    stroke-dashoffset: 0;
+  }
+
+  58% {
+    opacity: 0.72;
+    stroke-dashoffset: 0;
+  }
+
+  76%,
+  100% {
+    opacity: 0;
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes lotusFillReveal {
+  0%,
+  34% {
+    opacity: 0;
+  }
+
+  56%,
+  84% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes routeIn {
+  from {
+    opacity: 0.72;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes heroTextIn {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes heroRuleIn {
+  from {
+    transform: scaleX(0);
+  }
+
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes preloaderCell {
+  0% {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+
+  18% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}
+
+@keyframes preloaderCellWash {
+  0% {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+
+  28% {
+    opacity: 1;
+  }
+
+  72% {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scaleX(1);
+  }
+}
+
+@keyframes navChildrenIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scaleY(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scaleY(1);
+  }
+}

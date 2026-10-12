@@ -1,0 +1,314 @@
+.hero-band {
+  position: relative;
+  overflow: hidden;
+  height: 460px;
+  display: grid;
+  grid-template-columns: clamp(220px, 27.5%, 520px) minmax(0, 1fr);
+  align-items: end;
+  gap: 0;
+  padding: 0 32px 24px 0;
+  background: #001d37;
+  color: #ffffff;
+}
+
+.hero-band.is-media {
+  isolation: isolate;
+}
+
+.hero-band.is-animated {
+  isolation: isolate;
+  background: #001d37;
+}
+
+.hero-band.is-subsidiary {
+  background: #001d37;
+}
+
+.hero-band.is-library {
+  isolation: isolate;
+  background: #001d37;
+}
+
+.hero-band.is-media::before {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  background: rgba(0, 29, 55, 0.34);
+  pointer-events: none;
+}
+
+.hero-band.is-subsidiary::before {
+  display: none;
+}
+
+.hero-band.is-media::after,
+.hero-band.is-animated::after,
+.hero-band.is-library::after,
+.hero-band.is-media .hero-number,
+.hero-band.is-media .hero-title,
+.hero-band.is-animated .hero-number,
+.hero-band.is-animated .hero-title,
+.hero-band.is-library .hero-number,
+.hero-band.is-library .hero-title {
+  z-index: 2;
+}
+
+.color-hero-animation {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  overflow: hidden;
+}
+
+.color-hero-tile {
+  position: absolute;
+  display: block;
+  min-width: 0;
+  min-height: 0;
+  background: var(--tile-color);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  will-change: left, top, width, height;
+}
+
+.library-hero-bg {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  overflow: hidden;
+  background: #001d37;
+}
+
+.library-shader,
+.library-hero-bg canvas,
+.library-hero-bg svg {
+  position: absolute !important;
+  inset: 0;
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.library-hero-bg > div {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.library-hero-bg.is-miniature {
+  position: absolute;
+  inset: 0;
+  background: #eef6fb;
+}
+
+.library-hero-bg.is-miniature span {
+  position: absolute;
+  display: block;
+  background: var(--mini-color, #0056a2);
+  transition: transform var(--motion-standard) var(--ease);
+}
+
+.library-hero-bg.is-miniature span:nth-child(1) {
+  --mini-color: #0056a2;
+  inset: 0 42% 0 0;
+}
+
+.library-hero-bg.is-miniature span:nth-child(2) {
+  --mini-color: #22a8e0;
+  inset: 0 0 54% 58%;
+}
+
+.library-hero-bg.is-miniature span:nth-child(3) {
+  --mini-color: #de2327;
+  inset: 46% 0 0 58%;
+}
+
+.hero-cover-logo {
+  position: absolute;
+  z-index: 2;
+  top: 32px;
+  left: 32px;
+  width: clamp(220px, 28vw, 430px);
+  display: flex;
+  align-items: center;
+  gap: 3.9%;
+  opacity: 0.95;
+  filter: drop-shadow(0 12px 28px rgba(0, 29, 55, 0.18));
+  pointer-events: none;
+}
+
+.hero-cover-mark {
+  flex: 0 0 32.55%;
+  width: 32.55%;
+  height: auto;
+  overflow: visible;
+}
+
+.hero-cover-mark-outline path {
+  fill: transparent;
+  stroke: rgba(255, 255, 255, 0.95);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  vector-effect: non-scaling-stroke;
+  animation: lotusContourTrace 5.8s var(--ease) infinite;
+}
+
+.hero-cover-mark-fill path {
+  fill: #ffffff;
+  opacity: 0;
+  animation: lotusFillReveal 5.8s var(--ease) infinite;
+}
+
+.hero-cover-mark-outline path:nth-child(2),
+.hero-cover-mark-fill path:nth-child(2) {
+  animation-delay: 90ms;
+}
+
+.hero-cover-mark-outline path:nth-child(3),
+.hero-cover-mark-fill path:nth-child(3) {
+  animation-delay: 160ms;
+}
+
+.hero-cover-mark-outline path:nth-child(4),
+.hero-cover-mark-fill path:nth-child(4) {
+  animation-delay: 230ms;
+}
+
+.hero-cover-wordmark {
+  flex: 1 1 auto;
+  width: 63.56%;
+  overflow: hidden;
+  line-height: 0;
+  transform: translateY(1px);
+}
+
+.hero-cover-wordmark img {
+  display: block;
+  width: 157.11%;
+  max-width: none;
+  height: auto;
+  filter: brightness(0) invert(1);
+  transform: translateX(-36.37%);
+}
+
+.subsidiary-hero-lockup {
+  position: absolute;
+  z-index: 2;
+  top: 32px;
+  left: 32px;
+  --sub-logo-height: clamp(42px, 4.6vw, 54px);
+  --sub-region-left: calc(var(--sub-logo-height) * 2.04);
+  --sub-region-top: calc(var(--sub-logo-height) * 0.7);
+  width: calc(var(--sub-logo-height) * 4.34);
+  height: var(--sub-logo-height);
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.subsidiary-hero-fixed,
+.subsidiary-hero-region-window img {
+  position: absolute;
+  inset: 0 auto auto 0;
+  display: block;
+  width: auto;
+  max-width: none;
+  height: var(--sub-logo-height);
+  filter: brightness(0) invert(1) drop-shadow(0 14px 28px rgba(0, 29, 55, 0.18));
+}
+
+.subsidiary-hero-fixed {
+  z-index: 0;
+  clip-path: polygon(0 0, 100% 0, 100% var(--sub-region-top), var(--sub-region-left) var(--sub-region-top), var(--sub-region-left) 100%, 0 100%);
+}
+
+.subsidiary-hero-region-window {
+  position: absolute;
+  z-index: 2;
+  top: var(--sub-region-top);
+  right: 0;
+  bottom: 0;
+  left: var(--sub-region-left);
+  display: block;
+  overflow: hidden;
+}
+
+.subsidiary-hero-region-window img {
+  top: calc(var(--sub-region-top) * -1);
+  left: calc(var(--sub-region-left) * -1);
+}
+
+.hero-video {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero-band::after {
+  content: none;
+}
+
+.hero-number,
+.hero-title {
+  min-width: 0;
+  margin: 0;
+  font-size: clamp(42px, 5vw, 58px);
+  line-height: 0.98;
+  font-weight: 400;
+  letter-spacing: 0;
+  overflow-wrap: normal;
+  hyphens: none;
+  animation: heroTextIn 620ms var(--ease) both;
+}
+
+.hero-title {
+  animation-delay: 80ms;
+}
+
+.hero-number {
+  padding-left: 32px;
+}
+
+.intro-panel,
+.content-section,
+.end-links {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity var(--motion-page) var(--ease),
+    transform var(--motion-page) var(--ease);
+  transition-delay: calc(var(--reveal-index, 0) * 34ms);
+}
+
+.intro-panel[data-reveal="pending"]:not([data-inview="true"]),
+.content-section[data-reveal="pending"]:not([data-inview="true"]),
+.end-links[data-reveal="pending"]:not([data-inview="true"]) {
+  opacity: 0.01;
+  transform: translateY(28px);
+}
+
+.intro-panel[data-inview="true"],
+.content-section[data-inview="true"],
+.end-links[data-inview="true"] {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+/* Static first paint for optional motion-heavy GPU artwork. */
+.library-shader-fallback {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(125deg, #001d37, #0056a2 36%, #22a8e0 70%, #de2327);
+}
+
+.library-shader {
+  position: relative;
+  z-index: 1;
+}
