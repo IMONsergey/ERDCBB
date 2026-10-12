@@ -43,7 +43,7 @@ npm run test:e2e
 
 ## Публикация
 
-Ветка `main` публикуется на GitHub Pages по GitHub Actions с проверкой файлов и тестами. Отдельный workflow `Quality checks` выполняется для pull request и веток разработки, включая браузерные тесты. Прямой деплой без проверки в `main` не рекомендуется.
+Ветка `main` публикуется на GitHub Pages по существующему GitHub Actions workflow. Сейчас он выполняет сборку, но **не запускает полный набор проверок и E2E**. Перед merge необходимо выполнить `npm run check` и `npm run test:e2e` вручную или в CI. Подключение отдельного workflow качества требует разрешения GitHub `workflow`; пока такого разрешения нет. Прямой деплой без проверки в `main` не рекомендуется.
 
 Текущая карта: [brandbook-map.md](krdv-guidelines-prototype/brandbook-map.md). Актуальные ограничения: [design-qa.md](krdv-guidelines-prototype/design-qa.md).
 
