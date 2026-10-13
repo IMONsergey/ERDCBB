@@ -91,9 +91,19 @@ function App() {
       setActivePageId(next);
       setOpenGroup(next);
       setMenuOpen(false);
-      document.getElementById("page")?.scrollTo({ top: 0, left: 0, behavior: "auto" });
+      const sectionId = window.location.hash.replace(/^#\/?/, "").split("/")[1];
+      const isKnownSection = pagesById[next]?.sections.some((section) => section.id === sectionId);
+      if (isKnownSection) {
+        window.requestAnimationFrame(() => {
+          document.getElementById(sectionId)?.scrollIntoView({ block: "start", behavior: "auto" });
+        });
+      } else {
+        document.getElementById("page")?.scrollTo({ top: 0, left: 0, behavior: "auto" });
+      }
     };
 
+    // Apply deep links when the app opens, not only after browser history changes.
+    onHashChange();
     window.addEventListener("hashchange", onHashChange);
     window.addEventListener("popstate", onHashChange);
     return () => {
@@ -163,6 +173,9 @@ function App() {
   }
 
   function jumpTo(sectionId) {
+    if (!activePage.sections.some((section) => section.id === sectionId)) return;
+    const nextHash = "#/" + activePageId + "/" + sectionId;
+    if (window.location.hash !== nextHash) window.history.pushState(null, "", nextHash);
     const target = document.getElementById(sectionId);
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     target?.scrollIntoView({ block: "start", behavior: reducedMotion ? "auto" : "smooth" });

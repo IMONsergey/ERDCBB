@@ -1,5 +1,5 @@
 import { copyText } from "../lib/clipboard.js";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, LayoutGroup, motion } from "motion/react";
 import { rasterAsset, ICONS, t, fontFamilies, pagesData } from "../data/brandbook.js";
 import { UiIcon } from "./UiIcon.jsx";
@@ -37,6 +37,7 @@ function SpecGrid({ items }) {
 function PaletteGrid({ colors }) {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [copyState, setCopyState] = useState({ key: null, status: null });
+  const copySequence = useRef(0);
   useEffect(() => {
     if (!copyState.status) return undefined;
     const timeout = window.setTimeout(() => setCopyState({ key: null, status: null }), 1900);
@@ -45,11 +46,13 @@ function PaletteGrid({ colors }) {
   const selected = colors[selectedIndex] || colors[0];
 
   async function copyHex(hex) {
+    const requestId = ++copySequence.current;
+    setCopyState({ key: null, status: null });
     try {
       await copyText(hex);
-      setCopyState({ key: hex, status: "success" });
+      if (copySequence.current === requestId) setCopyState({ key: hex, status: "success" });
     } catch {
-      setCopyState({ key: hex, status: "error" });
+      if (copySequence.current === requestId) setCopyState({ key: hex, status: "error" });
     }
   }
 
@@ -226,6 +229,7 @@ function FontWorkbench() {
 function RegimePalette({ items }) {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [copyState, setCopyState] = useState({ key: null, status: null });
+  const copySequence = useRef(0);
   useEffect(() => {
     if (!copyState.status) return undefined;
     const timeout = window.setTimeout(() => setCopyState({ key: null, status: null }), 1900);
@@ -234,11 +238,13 @@ function RegimePalette({ items }) {
   const selected = items[selectedIndex] || items[0];
 
   async function copyHex(item) {
+    const requestId = ++copySequence.current;
+    setCopyState({ key: null, status: null });
     try {
       await copyText(item.color);
-      setCopyState({ key: item.short, status: "success" });
+      if (copySequence.current === requestId) setCopyState({ key: item.short, status: "success" });
     } catch {
-      setCopyState({ key: item.short, status: "error" });
+      if (copySequence.current === requestId) setCopyState({ key: item.short, status: "error" });
     }
   }
 

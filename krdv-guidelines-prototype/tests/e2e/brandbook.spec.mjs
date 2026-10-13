@@ -299,3 +299,57 @@ test("logo format downloads point to present files", async ({ page }) => {
   expect(response.ok()).toBeTruthy();
   expect((await response.body()).length).toBeGreaterThan(100);
 });
+
+test("subsection URLs are shareable and browser Back restores the page", async ({ page, isMobile }) => {
+  await page.goto("/#/logo");
+  await ready(page);
+  if (isMobile) await page.locator(".mobile-menu-button").click();
+  await page.locator(".nav-group.is-open .nav-children button")
+    .filter({ hasText: "Охранное поле" }).click();
+  await expect(page).toHaveURL(/#\/logo\/clearspace$/);
+  await expect.poll(() => page.locator("#page").evaluate(el => el.scrollTop)).toBeGreaterThan(100);
+  await page.goBack();
+  await expect(page).toHaveURL(/#\/logo$/);
+  await page.goto("/#/logo/clearspace");
+  await ready(page);
+  await expect.poll(() => page.locator("#page").evaluate(el => el.scrollTop)).toBeGreaterThan(100);
+});
+
+test("older clipboard completion cannot overwrite a newer swatch", async ({ page }) => {
+  await page.addInitScript(() => {
+    window.__pendingCopies = [];
+    Object.defineProperty(navigator, "clipboard", {
+      configurable: true,
+      value: {
+        writeText: (text) => new Promise((resolve) => {
+          window.__pendingCopies.push({ text, resolve });
+        }),
+      },
+    });
+  });
+  await page.goto("/#/color");
+  await ready(page);
+  const buttons = page.locator(".palette-grid button");
+  await buttons.nth(0).click();
+  await buttons.nth(1).click();
+  await expect.poll(() => page.evaluate(() => window.__pendingCopies.length)).toBe(2);
+  await page.evaluate(() => {
+    window.__pendingCopies[1].resolve();
+    window.__pendingCopies[0].resolve();
+  });
+  await expect(buttons.nth(1).locator(".copy-action")).toContainText("Скопировано");
+  await expect(buttons.nth(0).locator(".copy-action")).not.toContainText("Скопировано");
+});
+
+test("clipboard fallback restores keyboard focus to the clicked control", async ({ page }) => {
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, "clipboard", { configurable: true, value: undefined });
+    document.execCommand = (command) => command === "copy";
+  });
+  await page.goto("/#/color");
+  await ready(page);
+  const swatch = page.locator(".palette-grid button").first();
+  await swatch.click();
+  await expect(swatch.locator(".copy-action")).toContainText("Скопировано");
+  await expect(swatch).toBeFocused();
+});
