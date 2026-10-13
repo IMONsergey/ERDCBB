@@ -32,11 +32,13 @@ function SmartVideo({ className, filename }) {
     }
     preference.addEventListener?.("change", sync);
     document.addEventListener("visibilitychange", sync);
+    video.addEventListener("loadeddata", sync);
 
     return () => {
       observer?.disconnect();
       preference.removeEventListener?.("change", sync);
       document.removeEventListener("visibilitychange", sync);
+      video.removeEventListener("loadeddata", sync);
       video.pause();
     };
   }, [filename]);

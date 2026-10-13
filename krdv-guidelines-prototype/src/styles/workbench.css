@@ -54,12 +54,7 @@
 .font-style-chips > span,
 .font-size-control span,
 .font-size-control strong,
-.font-preview-meta,
-.font-current-file > span,
-.font-file-link,
-.font-download-family > div > span,
-.font-download-family > div > p,
-.font-archive-link em {
+.font-preview-meta {
   font-family: var(--mono);
   font-size: 12px;
   line-height: 1.25;
@@ -392,6 +387,8 @@
 }
 
 .typograf-demo p {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
   min-height: 180px;
   margin: 0;
   border: 1px solid var(--line);
@@ -579,4 +576,11 @@
 .end-links button:last-child:hover em,
 .end-links button:last-child:focus-visible em {
   transform: translateX(4px);
+}
+
+/* Visible keyboard focus takes precedence over generic :focus border resets. */
+.font-preview-input input:focus-visible,
+.typograf-demo textarea:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 2px;
 }

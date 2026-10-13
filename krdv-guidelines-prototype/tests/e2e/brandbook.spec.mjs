@@ -217,3 +217,153 @@ test("overview shader falls back cleanly when browser WebGL is unavailable", asy
   await expect(page.locator(".hero-title")).toHaveText("Обзор");
   expect(errors).toEqual([]);
 });
+
+test("keyboard skip control and route titles remain accessible", async ({ page }) => {
+  await page.goto("/#/overview");
+  await ready(page);
+  await expect(page).toHaveTitle("Руководство по фирменному стилю — КРДВ");
+  await page.keyboard.press("Tab");
+  await expect(page.locator(".skip-to-content")).toBeFocused();
+  await page.keyboard.press("Enter");
+  await expect(page.locator("#page")).toBeFocused();
+  await page.getByRole("button", { name: "Открыть раздел Логотип", exact: true }).click();
+  await expect(page.locator(".hero-title")).toHaveText("Логотип");
+  await expect(page).toHaveTitle("Логотип — брендбук КРДВ");
+  await expect(page.locator("#page")).toBeFocused();
+});
+
+test("subnavigation expands and adapts without fixed pixel heights", async ({ page, isMobile }) => {
+  await page.goto("/#/logo");
+  await ready(page);
+  if (isMobile) await page.locator(".mobile-menu-button").click();
+  const submenu = page.locator(".nav-group.is-open .nav-children-shell");
+  await expect(submenu).toBeVisible();
+  await expect.poll(() => submenu.evaluate(node => node.getBoundingClientRect().height)).toBeGreaterThan(80);
+  await page.setViewportSize({ width: isMobile ? 320 : 1024, height: 700 });
+  await expect.poll(() => submenu.evaluate(node => node.getBoundingClientRect().height)).toBeGreaterThan(80);
+});
+
+test("typographer keeps explicit paragraph breaks", async ({ page }) => {
+  await page.goto("/#/text");
+  await ready(page);
+  await page.locator(".typograf-demo textarea").fill("АО КРДВ\n10 кг");
+  const result = await page.locator(".typograf-demo p").textContent();
+  expect(result).toBe("АО\u00a0КРДВ\n10\u00a0кг");
+});
+
+test("small mobile, tablet, desktop layouts have no horizontal overflow", async ({ page }) => {
+  for (const width of [320, 768, 1024, 1440]) {
+    await page.setViewportSize({ width, height: 760 });
+    await page.goto("/#/logo");
+    await ready(page);
+    const sizes = await page.locator("#page").evaluate(el => ({
+      content: el.scrollWidth,
+      viewport: el.clientWidth,
+    }));
+    expect(sizes.content, "Overflow at " + width + "px").toBeLessThanOrEqual(sizes.viewport + 2);
+  }
+});
+
+test("print layout exposes hidden-by-scroll sections", async ({ page }) => {
+  await page.goto("/#/logo");
+  await ready(page);
+  await page.emulateMedia({ media: "print" });
+  const metrics = await page.locator("#page").evaluate(el => ({
+    overflow: getComputedStyle(el).overflow,
+    opacity: getComputedStyle(el.querySelector(".content-section")).opacity,
+    sidebar: getComputedStyle(document.querySelector(".sidebar")).display,
+  }));
+  expect(metrics.overflow).toBe("visible");
+  expect(metrics.opacity).toBe("1");
+  expect(metrics.sidebar).toBe("none");
+});
+
+test("font-size workbench reflects the chosen size on all screen widths", async ({ page }) => {
+  await page.goto("/#/typography");
+  await ready(page);
+  const slider = page.locator(".font-size-control input");
+  await slider.focus();
+  await slider.press("End");
+  await expect(page.locator(".font-size-control strong")).toHaveText("104px");
+  const size = await page.locator(".font-preview-sample").evaluate(node => getComputedStyle(node).fontSize);
+  expect(size).toBe("104px");
+});
+
+test("logo format downloads point to present files", async ({ page }) => {
+  await page.goto("/#/logo");
+  await ready(page);
+  const link = page.locator("#full .logo-downloads a").first();
+  await expect(link).toHaveAttribute("download", /\.svg$/);
+  const href = await link.getAttribute("href");
+  const response = await page.request.get(href);
+  expect(response.ok()).toBeTruthy();
+  expect((await response.body()).length).toBeGreaterThan(100);
+});
+
+test("subsection URLs are shareable and browser Back restores the page", async ({ page, isMobile }) => {
+  await page.goto("/#/logo");
+  await ready(page);
+  if (isMobile) await page.locator(".mobile-menu-button").click();
+  await page.locator(".nav-group.is-open .nav-children button")
+    .filter({ hasText: "Охранное поле" }).click();
+  await expect(page).toHaveURL(/#\/logo\/clearspace$/);
+  await expect.poll(() => page.locator("#page").evaluate(el => el.scrollTop)).toBeGreaterThan(100);
+  await page.goBack();
+  await expect(page).toHaveURL(/#\/logo$/);
+  await page.goto("/#/logo/clearspace");
+  await ready(page);
+  await expect.poll(() => page.locator("#page").evaluate(el => el.scrollTop)).toBeGreaterThan(100);
+});
+
+test("older clipboard completion cannot overwrite a newer swatch", async ({ page }) => {
+  await page.addInitScript(() => {
+    window.__pendingCopies = [];
+    Object.defineProperty(navigator, "clipboard", {
+      configurable: true,
+      value: {
+        writeText: (text) => new Promise((resolve) => {
+          window.__pendingCopies.push({ text, resolve });
+        }),
+      },
+    });
+  });
+  await page.goto("/#/color");
+  await ready(page);
+  const buttons = page.locator(".palette-grid button");
+  await buttons.nth(0).click();
+  await buttons.nth(1).click();
+  await expect.poll(() => page.evaluate(() => window.__pendingCopies.length)).toBe(2);
+  await page.evaluate(() => {
+    window.__pendingCopies[1].resolve();
+    window.__pendingCopies[0].resolve();
+  });
+  await expect(buttons.nth(1).locator(".copy-action")).toContainText("Скопировано");
+  await expect(buttons.nth(0).locator(".copy-action")).not.toContainText("Скопировано");
+});
+
+test("clipboard fallback restores keyboard focus to the clicked control", async ({ page }) => {
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, "clipboard", { configurable: true, value: undefined });
+    document.execCommand = (command) => command === "copy";
+  });
+  await page.goto("/#/color");
+  await ready(page);
+  const swatch = page.locator(".palette-grid button").first();
+  await swatch.click();
+  await expect(swatch.locator(".copy-action")).toContainText("Скопировано");
+  await expect(swatch).toBeFocused();
+});
+
+test("mobile menu targets retain comfortable touch sizes", async ({ page, isMobile }) => {
+  test.skip(!isMobile, "Applies to mobile drawer controls");
+  await page.goto("/#/logo");
+  await ready(page);
+  await page.locator(".mobile-menu-button").click();
+  const size = await page.locator(".nav-group.is-open").evaluate(group => {
+    const parent = group.querySelector(".nav-parent");
+    const child = group.querySelector(".nav-children button");
+    return { parent: parent.getBoundingClientRect().height, child: child.getBoundingClientRect().height };
+  });
+  expect(size.parent).toBeGreaterThanOrEqual(44);
+  expect(size.child).toBeGreaterThanOrEqual(44);
+});

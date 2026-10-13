@@ -92,6 +92,8 @@ test("Russian typographic rules preserve meaning", () => {
   assert.equal(typograf("10 кг"), "10\u00a0кг");
   assert.equal(typograf("2 x 3"), "2×3");
   assert.equal(typograf(null), null);
+  assert.equal(typograf("АО КРДВ\n10 кг"), "АО\u00a0КРДВ\n10\u00a0кг");
+  assert.equal(typograf("АО КРДВ\r\n10 кг"), "АО\u00a0КРДВ\n10\u00a0кг");
 });
 test("primary artwork SVG is not raster content in disguise", () => {
   for (const file of ["krdv-logo-full.svg", "krdv-mark.svg", "logo-master.svg", "logo-versions.svg"]) {

@@ -24,13 +24,7 @@
   background: var(--surface-hover);
 }
 
-.logo-library[data-count="3"] .logo-card.is-mark {
-  grid-column: 1 / -1;
-  grid-template-columns: minmax(220px, 0.42fr) minmax(0, 1fr);
-  align-items: center;
-}
-
-.logo-library[data-count="3"] .logo-card.is-mark .logo-preview {
+.logo-preview {
   border-right: 1px solid var(--line);
   border-bottom: 0;
 }
@@ -58,10 +52,6 @@
 
 .logo-card.is-horizontal .logo-preview img {
   max-height: 92px;
-}
-
-.logo-card.is-mark .logo-preview img {
-  width: min(160px, 70%);
 }
 
 .logo-card-copy {

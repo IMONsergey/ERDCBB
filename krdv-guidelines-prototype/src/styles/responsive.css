@@ -252,23 +252,8 @@
     padding: 0;
   }
 
-  .logo-library[data-count="3"] .logo-card.is-mark {
-    grid-column: auto;
-    grid-template-columns: 1fr;
-  }
-
-  .logo-library[data-count="3"] .logo-card.is-mark .logo-preview {
-    border-right: 0;
-    border-bottom: 1px solid var(--line);
-  }
-
-  .logo-library[data-count="3"] .logo-card.is-mark .logo-card-copy {
-    padding: 16px 16px 0;
-  }
-
   .logo-preview,
-  .logo-card.is-horizontal .logo-preview,
-  .logo-card.is-mark .logo-preview {
+  .logo-card.is-horizontal .logo-preview {
     height: 184px;
     min-height: 0;
   }
@@ -347,8 +332,7 @@
     font-size: 34px;
   }
 
-  .font-workbench-controls,
-  .font-download-family > div:first-child {
+  .font-workbench-controls {
     border-left: 0;
     border-right: 0;
     border-bottom: 1px solid var(--line);
@@ -370,26 +354,10 @@
   }
 
   .font-preview-sample {
-    font-size: min(var(--preview-size), 52px);
+    font-size: var(--preview-size);
+    max-width: 100%;
+    overflow-wrap: anywhere;
     line-height: 1.02;
-  }
-
-  .font-file-grid {
-    border-left: 0;
-    margin-left: 0;
-  }
-
-  .font-archive-link {
-    min-height: 86px;
-    padding: 20px;
-  }
-
-  .font-archive-link strong {
-    font-size: 24px;
-  }
-
-  .contact-block span {
-    font-size: 20px;
   }
 
   .end-links {
@@ -470,5 +438,27 @@
 
   .color-hero-tile {
     transform: none !important;
+  }
+}
+
+/* Dynamic browser chrome must not hide the last navigation item on mobile. */
+@supports (height: 100dvh) {
+  .guideline-shell, .page-scroll, .sidebar, .brand-preloader {
+    height: 100dvh;
+  }
+}
+@media (max-width: 860px) {
+  .mobile-menu-button {
+    top: max(12px, env(safe-area-inset-top));
+    right: max(12px, env(safe-area-inset-right));
+  }
+  .nav-parent,
+  .nav-children button {
+    min-height: 44px;
+  }
+}
+@media (pointer: coarse) {
+  button, a {
+    touch-action: manipulation;
   }
 }

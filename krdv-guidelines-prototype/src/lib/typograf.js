@@ -54,7 +54,7 @@ const hangingPattern = new RegExp(`(^|[\\s([{«„])(${HANGING_WORDS.join("|")})
 
 function typograf(value) {
   if (typeof value !== "string") return value;
-  return value
+  return value.replace(/\r\n?/g, "\n").split("\n").map((line) => line
     .replace(/\s+/g, " ")
     .replace(/(^|[\s([{«„])"([^"]+?)"/giu, "$1«$2»")
     .replace(/(\d)\s(?=\d{3}(?:\D|$))/g, `$1${NBSP}`)
@@ -62,9 +62,9 @@ function typograf(value) {
     .replace(/(№)\s+/giu, `$1${NBSP}`)
     .replace(hangingPattern, `$1$2${NBSP}`)
     .replace(/(\d)\s+(?=(?:мм|см|м²|м|г\/м²|г|кг|pt|%|₽|руб\.?|год(?:а|ы)?|ч|мин)(?=$|[\s.,;:!?)}\]]))/giu, `$1${NBSP}`)
-    .replace(/\s+—\s+/g, `${NBSP}— `);
+    .replace(/\s+—\s+/g, `${NBSP}— `))
+    .join("\n");
 }
-
 const t = typograf;
 
 export { typograf, t };
