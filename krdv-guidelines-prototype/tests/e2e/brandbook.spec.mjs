@@ -217,3 +217,28 @@ test("overview shader falls back cleanly when browser WebGL is unavailable", asy
   await expect(page.locator(".hero-title")).toHaveText("Обзор");
   expect(errors).toEqual([]);
 });
+
+test("keyboard skip control and route titles remain accessible", async ({ page }) => {
+  await page.goto("/#/overview");
+  await ready(page);
+  await expect(page).toHaveTitle("Руководство по фирменному стилю — КРДВ");
+  await page.keyboard.press("Tab");
+  await expect(page.locator(".skip-to-content")).toBeFocused();
+  await page.keyboard.press("Enter");
+  await expect(page.locator("#page")).toBeFocused();
+  await page.locator(".directory-card").filter({ hasText: "Логотип" }).click();
+  await expect(page.locator(".hero-title")).toHaveText("Логотип");
+  await expect(page).toHaveTitle("Логотип — брендбук КРДВ");
+  await expect(page.locator("#page")).toBeFocused();
+});
+
+test("subnavigation expands and adapts without fixed pixel heights", async ({ page, isMobile }) => {
+  await page.goto("/#/logo");
+  await ready(page);
+  if (isMobile) await page.locator(".mobile-menu-button").click();
+  const submenu = page.locator(".nav-group.is-open .nav-children-shell");
+  await expect(submenu).toBeVisible();
+  await expect.poll(() => submenu.evaluate(node => node.getBoundingClientRect().height)).toBeGreaterThan(80);
+  await page.setViewportSize({ width: isMobile ? 320 : 1024, height: 700 });
+  await expect.poll(() => submenu.evaluate(node => node.getBoundingClientRect().height)).toBeGreaterThan(80);
+});

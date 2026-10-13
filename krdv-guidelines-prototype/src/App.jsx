@@ -25,6 +25,13 @@ function App() {
   const activePage = pagesById[activePageId] || pagesById.overview;
 
   useEffect(() => {
+    document.title = activePageId === "overview"
+      ? "Руководство по фирменному стилю — КРДВ"
+      : activePage.title + " — брендбук КРДВ";
+    document.querySelector('meta[name="description"]')?.setAttribute("content", activePage.intro);
+  }, [activePageId, activePage.title, activePage.intro]);
+
+  useEffect(() => {
     const media = window.matchMedia("(max-width: 860px)");
     const update = () => {
       setIsMobile(media.matches);
@@ -152,6 +159,7 @@ function App() {
     setOpenGroup(pageId);
     setMenuOpen(false);
     document.getElementById("page")?.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    window.requestAnimationFrame(() => document.getElementById("page")?.focus({ preventScroll: true }));
   }
 
   function jumpTo(sectionId) {
@@ -164,6 +172,13 @@ function App() {
   return (
     <MotionConfig reducedMotion="user" transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}>
       <LayoutGroup id="brandbook-shell">
+        <button
+          type="button"
+          className="skip-to-content"
+          onClick={() => document.getElementById("page")?.focus({ preventScroll: false })}
+        >
+          {t("Перейти к содержимому")}
+        </button>
         <AnimatePresence>{showPreloader ? <BrandPreloader /> : null}</AnimatePresence>
         <div className={`guideline-shell ${menuOpen ? "nav-open" : ""}`}>
           <button ref={menuButtonRef} className="mobile-menu-button" type="button" aria-controls="brandbook-navigation" aria-expanded={menuOpen} onClick={() => setMenuOpen((value) => !value)}>

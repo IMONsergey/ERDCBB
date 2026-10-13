@@ -227,23 +227,24 @@
 }
 
 .nav-children-shell {
-  height: 0;
-  box-sizing: border-box;
-  overflow: hidden;
+  display: grid;
+  grid-template-rows: 0fr;
   opacity: 0;
   pointer-events: none;
   transition:
-    height 420ms var(--ease),
+    grid-template-rows 360ms var(--ease),
     opacity 180ms var(--ease-standard);
-  will-change: height, opacity;
 }
 
 .nav-group.is-open .nav-children-shell {
+  grid-template-rows: 1fr;
   opacity: 1;
   pointer-events: auto;
-  transition:
-    height 420ms var(--ease),
-    opacity 220ms var(--ease) 70ms;
+}
+
+.nav-children-clip {
+  min-height: 0;
+  overflow: hidden;
 }
 
 .nav-children {
@@ -314,10 +315,30 @@
   height: 100vh;
   overflow: auto;
   background: #ffffff;
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
 }
 
 .guideline-page {
   min-height: 100%;
   animation: pageEnter var(--motion-page) var(--ease);
+}
+
+/* Keyboard-only skip control does not alter the existing editorial layout. */
+.skip-to-content {
+  position: fixed;
+  z-index: 110;
+  top: max(12px, env(safe-area-inset-top));
+  left: 12px;
+  max-width: calc(100vw - 24px);
+  min-height: 44px;
+  border: 1px solid var(--blue);
+  border-radius: 6px;
+  padding: 10px 16px;
+  background: #ffffff;
+  color: var(--blue);
+  transform: translateY(calc(-100% - 24px));
+  transition: transform 150ms var(--ease-standard);
+}
+.skip-to-content:focus-visible {
+  transform: translateY(0);
 }
