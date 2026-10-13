@@ -370,7 +370,9 @@
   }
 
   .font-preview-sample {
-    font-size: min(var(--preview-size), 52px);
+    font-size: var(--preview-size);
+    max-width: 100%;
+    overflow-wrap: anywhere;
     line-height: 1.02;
   }
 

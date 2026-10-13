@@ -87,6 +87,18 @@ function ColorHeroAnimation() {
     let ctx;
     let timeline;
     let visibilityObserver;
+    let inViewport = false;
+    const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const syncAnimation = () => {
+      if (inViewport && document.visibilityState === "visible" && !preference.matches) {
+        timeline?.resume();
+      } else {
+        timeline?.pause();
+      }
+    };
+
+    document.addEventListener("visibilitychange", syncAnimation);
+    preference.addEventListener?.("change", syncAnimation);
 
     import("gsap").then(({ gsap }) => {
       if (cancelled || !rootRef.current) return;
@@ -121,18 +133,21 @@ function ColorHeroAnimation() {
 
       if ("IntersectionObserver" in window) {
         visibilityObserver = new IntersectionObserver(([entry]) => {
-          if (entry.isIntersecting && document.visibilityState === "visible") timeline?.resume();
-          else timeline?.pause();
+          inViewport = entry.isIntersecting;
+          syncAnimation();
         }, { threshold: 0.05 });
         visibilityObserver.observe(rootRef.current);
       } else {
-        timeline?.resume();
+        inViewport = true;
+        syncAnimation();
       }
     });
 
     return () => {
       cancelled = true;
       visibilityObserver?.disconnect();
+      document.removeEventListener("visibilitychange", syncAnimation);
+      preference.removeEventListener?.("change", syncAnimation);
       ctx?.revert();
     };
   }, []);
@@ -161,21 +176,48 @@ function ColorHeroAnimation() {
 
 function SubsidiaryHeroAnimation() {
   const [activeIndex, setActiveIndex] = useState(0);
+  const rootRef = useRef(null);
 
   useEffect(() => {
-    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return undefined;
-
-    const timer = window.setInterval(() => {
-      setActiveIndex((index) => (index + 1) % subsidiaryHeroLogos.length);
-    }, 1850);
-
-    return () => window.clearInterval(timer);
+    const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let inViewport = false;
+    let timer = null;
+    const sync = () => {
+      const shouldAnimate = inViewport && document.visibilityState === "visible" && !preference.matches;
+      if (shouldAnimate && timer === null) {
+        timer = window.setInterval(() => {
+          setActiveIndex((index) => (index + 1) % subsidiaryHeroLogos.length);
+        }, 1850);
+      } else if (!shouldAnimate && timer !== null) {
+        window.clearInterval(timer);
+        timer = null;
+      }
+    };
+    const observer = "IntersectionObserver" in window
+      ? new IntersectionObserver(([entry]) => {
+          inViewport = entry.isIntersecting;
+          sync();
+        }, { threshold: 0.05 })
+      : null;
+    if (observer && rootRef.current) observer.observe(rootRef.current);
+    else {
+      inViewport = true;
+      sync();
+    }
+    document.addEventListener("visibilitychange", sync);
+    preference.addEventListener?.("change", sync);
+    return () => {
+      observer?.disconnect();
+      document.removeEventListener("visibilitychange", sync);
+      preference.removeEventListener?.("change", sync);
+      if (timer !== null) window.clearInterval(timer);
+    };
   }, []);
 
   const logo = subsidiaryHeroLogos[activeIndex];
 
   return (
-    <div className="subsidiary-hero-lockup" aria-hidden="true">
+    <div className="subsidiary-hero-lockup" ref={rootRef} aria-hidden="true">
       <img className="subsidiary-hero-fixed" src={subsidiaryAsset(subsidiaryHeroLogos[0].file)} alt="" />
       <span className="subsidiary-hero-region-window">
         <AnimatePresence mode="wait" initial={false}>

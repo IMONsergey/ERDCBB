@@ -277,3 +277,25 @@ test("print layout exposes hidden-by-scroll sections", async ({ page }) => {
   expect(metrics.opacity).toBe("1");
   expect(metrics.sidebar).toBe("none");
 });
+
+test("font-size workbench reflects the chosen size on all screen widths", async ({ page }) => {
+  await page.goto("/#/typography");
+  await ready(page);
+  const slider = page.locator(".font-size-control input");
+  await slider.focus();
+  await slider.press("End");
+  await expect(page.locator(".font-size-control strong")).toHaveText("104px");
+  const size = await page.locator(".font-preview-sample").evaluate(node => getComputedStyle(node).fontSize);
+  expect(size).toBe("104px");
+});
+
+test("logo format downloads point to present files", async ({ page }) => {
+  await page.goto("/#/logo");
+  await ready(page);
+  const link = page.locator("#full .logo-downloads a").first();
+  await expect(link).toHaveAttribute("download", /\.svg$/);
+  const href = await link.getAttribute("href");
+  const response = await page.request.get(href);
+  expect(response.ok()).toBeTruthy();
+  expect((await response.body()).length).toBeGreaterThan(100);
+});
