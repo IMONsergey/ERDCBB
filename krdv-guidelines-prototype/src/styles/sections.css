@@ -546,3 +546,22 @@
   color: #323b42;
   font-weight: 500;
 }
+
+/* Still-image thumbnails reuse the exact editorial scene of each section hero. */
+.directory-visual.has-still-cover {
+  background: #f3f4f5;
+}
+
+.directory-visual.has-still-cover::after {
+  content: none;
+}
+
+.directory-still-image {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 58%;
+}

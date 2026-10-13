@@ -462,3 +462,22 @@
     touch-action: manipulation;
   }
 }
+
+@media (max-width: 860px) {
+  .hero-band.is-still-cover {
+    height: 360px;
+    align-content: end;
+    justify-items: start;
+    gap: 8px;
+    padding: 70px 20px 26px;
+  }
+  .hero-band.is-still-cover::before {
+    background: linear-gradient(0deg, rgba(249,249,249,0.98) 0%, rgba(249,249,249,0.84) 20%, rgba(249,249,249,0.18) 65%, rgba(249,249,249,0) 100%);
+  }
+  .hero-band.is-still-cover .hero-number { font-size: 18px; }
+  .hero-band.is-still-cover .hero-title {
+    max-width: 100%;
+    font-size: clamp(28px, 8vw, 38px);
+    line-height: 1.08;
+  }
+}

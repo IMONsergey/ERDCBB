@@ -1,6 +1,6 @@
 import { SmartVideo } from "./SmartVideo.jsx";
 import { motion } from "motion/react";
-import { ICONS, t, pagesData } from "../data/brandbook.js";
+import { ICONS, t, pagesData, heroAsset } from "../data/brandbook.js";
 import { HeroLogoLockup, ColorHeroAnimation, SubsidiaryHeroAnimation, LibraryHeroBackground } from "./Hero.jsx";
 import { UiIcon } from "./UiIcon.jsx";
 import { LogoLibrary, SubsidiaryLogoLibrary, RegimeSignLibrary, MadeSignLibrary, ResourceLinks, AssetImageGrid } from "./AssetLibraries.jsx";
@@ -8,13 +8,15 @@ import { RuleList, SpecGrid, PaletteGrid, TypeSpecimens, FontWorkbench, RegimePa
 
 function GuidelinePage({ page, activePageId, navigate }) {
   const hasMediaHero = Boolean(page.heroVideo);
+  const hasStillHero = Boolean(page.heroImage);
   const hasAnimatedHero = Boolean(page.heroAnimation);
   const hasSubsidiaryHero = page.heroAnimation === "subsidiaryRegions";
   const hasLibraryHero = Boolean(page.heroLibrary);
 
   return (
     <article className="guideline-page">
-      <header className={`hero-band ${hasMediaHero ? "is-media" : ""} ${hasAnimatedHero ? "is-animated" : ""} ${hasSubsidiaryHero ? "is-subsidiary" : ""} ${hasLibraryHero ? "is-library" : ""}`} aria-label={t(page.title)}>
+      <header className={`hero-band ${hasMediaHero ? "is-media" : ""} ${hasAnimatedHero ? "is-animated" : ""} ${hasSubsidiaryHero ? "is-subsidiary" : ""} ${hasLibraryHero ? "is-library" : ""} ${hasStillHero ? "is-still-cover" : ""}`} aria-label={t(page.title)}>
+        {page.heroImage ? <img className="hero-still-image" src={heroAsset(page.heroImage)} alt="" aria-hidden="true" decoding="async" fetchPriority="high" /> : null}
         {page.heroVideo ? <SmartVideo className="hero-video" filename={page.heroVideo} /> : null}
         {page.heroAnimation === "colorTiles" ? <ColorHeroAnimation /> : null}
         {hasSubsidiaryHero ? <SubsidiaryHeroAnimation /> : null}
@@ -146,7 +148,8 @@ function SectionDirectory({ navigate, activePageId }) {
       <motion.div className="section-directory">
         {pagesData.map((page) => {
           const isCurrent = activePageId === page.id;
-          const hasCover = Boolean(page.heroVideo);
+          const hasCover = Boolean(page.heroVideo || page.heroImage);
+          const hasStillCover = Boolean(page.heroImage);
           const hasMotionCover = page.heroAnimation === "colorTiles";
           const hasLibraryCover = Boolean(page.heroLibrary);
 
@@ -163,8 +166,9 @@ function SectionDirectory({ navigate, activePageId }) {
               aria-current={isCurrent ? "page" : undefined}
               aria-label={t("Открыть раздел " + (page.directoryTitle || page.title))}
             >
-              <div data-topic={page.id} className={`directory-visual ${hasCover || hasMotionCover || hasLibraryCover ? "has-cover" : ""} ${hasMotionCover ? "has-motion-cover" : ""} ${hasLibraryCover ? "has-library-cover" : ""}`} aria-hidden="true">
+              <div data-topic={page.id} className={`directory-visual ${hasCover || hasMotionCover || hasLibraryCover ? "has-cover" : ""} ${hasMotionCover ? "has-motion-cover" : ""} ${hasLibraryCover ? "has-library-cover" : ""} ${hasStillCover ? "has-still-cover" : ""}`} aria-hidden="true">
                 {page.heroVideo ? <SmartVideo className="directory-video" filename={page.heroVideo} /> : null}
+                {page.heroImage ? <img className="directory-still-image" src={heroAsset(page.heroImage)} alt="" loading="lazy" decoding="async" /> : null}
                 {hasMotionCover ? <ColorHeroAnimation /> : null}
                 {hasLibraryCover ? <LibraryHeroBackground variant={page.heroLibrary} miniature /> : null}
                 {hasCover || hasMotionCover || hasLibraryCover ? null : <div className="directory-fallback" />}
