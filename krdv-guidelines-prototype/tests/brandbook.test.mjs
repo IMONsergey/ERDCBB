@@ -51,6 +51,7 @@ test("all downloadable logos, marks, fonts, imagery and videos exist", () => {
       asset("assets/hero/" + page.heroVideo);
       asset("assets/hero/" + page.heroVideo.replace(".mp4", ".webp"));
     }
+    if (page.heroImage) asset("assets/hero/" + page.heroImage);
     if (page.heroLogo) asset("assets/logos/" + page.heroLogo);
     for (const section of page.sections) {
       for (const group of ["assetImages", "preAssetImages"]) {
@@ -125,4 +126,13 @@ test("public download resources are accessible share links, not internal login f
   const businessCard = pagesById.corporate.sections.find((section) => section.id === "business-card");
   assert.equal(logoVersions.resourceLinks, undefined);
   assert.equal(businessCard.resourceLinks, undefined);
+});
+
+test("all fourteen sections have an intentional cover; nine editorial JPEGs keep original logo assets untouched", () => {
+  const illustrated = ["positioning","regimes","typography","text","corporate","advertising","merch","made","appendix"];
+  assert.deepEqual(pagesData.filter(p => p.heroImage).map(p => p.id), illustrated);
+  for (const page of pagesData) {
+    assert.ok(page.heroVideo || page.heroImage || page.heroAnimation || page.heroLibrary, "Missing cover: " + page.id);
+    if (page.heroImage) assert.match(page.heroImage, /^cover-[a-z-]+\.jpg$/);
+  }
 });

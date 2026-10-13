@@ -312,3 +312,56 @@
   position: relative;
   z-index: 1;
 }
+
+/* Nine editorial still-image covers: the image never contains an embedded title or altered logo. */
+.hero-band.is-still-cover {
+  isolation: isolate;
+  grid-template-columns: minmax(0, 1fr);
+  grid-auto-rows: min-content;
+  align-content: end;
+  justify-items: start;
+  gap: 12px;
+  padding: 32px 36px 36px;
+  background: #f4f5f5;
+  color: #001d37;
+}
+
+.hero-band.is-still-cover::before {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(90deg, rgba(249, 249, 249, 0.97) 0%, rgba(249, 249, 249, 0.76) 24%, rgba(249, 249, 249, 0.18) 61%, rgba(249, 249, 249, 0) 85%);
+}
+
+.hero-still-image {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 56%;
+}
+
+.hero-band.is-still-cover .hero-number,
+.hero-band.is-still-cover .hero-title {
+  position: relative;
+  z-index: 2;
+  padding: 0;
+  text-wrap: balance;
+}
+
+.hero-band.is-still-cover .hero-number {
+  font-size: 22px;
+  line-height: 1;
+}
+
+.hero-band.is-still-cover .hero-title {
+  max-width: min(64%, 720px);
+  font-size: clamp(36px, 4.2vw, 58px);
+  line-height: 1.05;
+  overflow-wrap: anywhere;
+}

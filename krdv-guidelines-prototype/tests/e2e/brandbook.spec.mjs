@@ -367,3 +367,37 @@ test("mobile menu targets retain comfortable touch sizes", async ({ page, isMobi
   expect(size.parent).toBeGreaterThanOrEqual(44);
   expect(size.child).toBeGreaterThanOrEqual(44);
 });
+
+test("nine neutral image covers render correctly in hero and directory", async ({ page }) => {
+  const illustrated = ["positioning","regimes","typography","text","corporate","advertising","merch","made","appendix"];
+  await page.goto("/#/overview");
+  await ready(page);
+  await expect(page.locator(".directory-visual.has-still-cover")).toHaveCount(9);
+  for (const card of await page.locator(".directory-visual.has-still-cover").all()) {
+    const image = card.locator(".directory-still-image");
+    await expect(image).toHaveAttribute("src", /\/ERDCBB\/assets\/hero\/cover-|\/assets\/hero\/cover-/);
+  }
+  for (const id of illustrated) {
+    await page.goto("/#/" + id);
+    await ready(page);
+    const hero = page.locator(".hero-band.is-still-cover");
+    await expect(hero).toBeVisible();
+    const image = hero.locator(".hero-still-image");
+    await expect(image).toBeVisible();
+    await expect.poll(() => image.evaluate(el => el.complete && el.naturalWidth > 1000)).toBeTruthy();
+    await expect(hero.locator(".hero-title")).toBeVisible();
+  }
+});
+
+test("new light-cover headings preserve readable dark ink", async ({ page }) => {
+  await page.goto("/#/typography");
+  await ready(page);
+  const metrics = await page.locator(".hero-band.is-still-cover").evaluate(hero => ({
+    color: getComputedStyle(hero).color,
+    numberVisible: hero.querySelector(".hero-number").getBoundingClientRect().width > 0,
+    titleVisible: hero.querySelector(".hero-title").getBoundingClientRect().height > 0,
+  }));
+  expect(metrics.color).toBe("rgb(0, 29, 55)");
+  expect(metrics.numberVisible).toBe(true);
+  expect(metrics.titleVisible).toBe(true);
+});
