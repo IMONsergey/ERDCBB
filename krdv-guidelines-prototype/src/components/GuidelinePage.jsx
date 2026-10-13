@@ -1,5 +1,5 @@
 import { SmartVideo } from "./SmartVideo.jsx";
-import { LayoutGroup, motion } from "motion/react";
+import { motion } from "motion/react";
 import { ICONS, t, pagesData } from "../data/brandbook.js";
 import { HeroLogoLockup, ColorHeroAnimation, SubsidiaryHeroAnimation, LibraryHeroBackground } from "./Hero.jsx";
 import { UiIcon } from "./UiIcon.jsx";
@@ -107,16 +107,16 @@ function ExampleGrid({ items }) {
 
 function CardGrid({ items }) {
   return (
-    <LayoutGroup>
-      <motion.div className="card-grid" layout>
+    
+      <motion.div className="card-grid">
         {items.map((item, index) => (
-          <motion.article className="info-card" key={`${item.title}-${index}`} layout whileHover={{ y: -2 }}>
+          <motion.article className="info-card" key={`${item.title}-${index}`} whileHover={{ y: -2 }}>
             <h3>{t(item.title)}</h3>
             <p>{t(item.text)}</p>
           </motion.article>
         ))}
       </motion.div>
-    </LayoutGroup>
+    
   );
 }
 
@@ -142,8 +142,8 @@ function PositioningShowcase() {
 
 function SectionDirectory({ navigate, activePageId }) {
   return (
-    <LayoutGroup>
-      <motion.div className="section-directory" layout>
+    
+      <motion.div className="section-directory">
         {pagesData.map((page) => {
           const isCurrent = activePageId === page.id;
           const hasCover = Boolean(page.heroVideo);
@@ -156,7 +156,7 @@ function SectionDirectory({ navigate, activePageId }) {
               data-current={isCurrent}
               key={page.id}
               type="button"
-              layout
+             
               onClick={() => navigate(page.id)}
               whileHover={{ y: -2 }}
               whileTap={{ scale: 0.992 }}
@@ -181,7 +181,7 @@ function SectionDirectory({ navigate, activePageId }) {
           );
         })}
       </motion.div>
-    </LayoutGroup>
+    
   );
 }
 

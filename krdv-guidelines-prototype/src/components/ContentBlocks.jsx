@@ -1,6 +1,6 @@
 import { copyText } from "../lib/clipboard.js";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { AnimatePresence, LayoutGroup, motion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import { rasterAsset, ICONS, t, fontFamilies, pagesData } from "../data/brandbook.js";
 import { UiIcon } from "./UiIcon.jsx";
 
@@ -57,14 +57,14 @@ function PaletteGrid({ colors }) {
   }
 
   return (
-    <LayoutGroup>
+    
       <div className="palette-stage" style={{ "--active-color": selected?.hex }}>
-        <motion.div className="palette-grid" layout>
+        <motion.div className="palette-grid">
           {colors.map((color, index) => (
             <motion.button
               key={color.hex}
               type="button"
-              layout
+             
               aria-pressed={selectedIndex === index}
               data-active={selectedIndex === index}
               onClick={() => {
@@ -89,7 +89,7 @@ function PaletteGrid({ colors }) {
           ))}
         </motion.div>
       </div>
-    </LayoutGroup>
+    
   );
 }
 
@@ -249,14 +249,14 @@ function RegimePalette({ items }) {
   }
 
   return (
-    <LayoutGroup>
+    
       <div className="regime-palette-stage" style={{ "--active-regime-color": selected?.color }}>
-        <motion.div className="regime-palette" layout>
+        <motion.div className="regime-palette">
           {items.map((item, index) => (
             <motion.button
               key={item.short}
               type="button"
-              layout
+             
               data-active={selectedIndex === index}
               aria-pressed={selectedIndex === index}
               style={{ "--regime-color": item.color }}
@@ -280,7 +280,7 @@ function RegimePalette({ items }) {
           ))}
         </motion.div>
       </div>
-    </LayoutGroup>
+    
   );
 }
 

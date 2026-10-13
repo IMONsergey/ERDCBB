@@ -106,13 +106,6 @@ const regimeColorCoding = ["Гектар", "СПВ", "КОРФ", "ТОР", "СА
   .map((short) => regimes.find((item) => item.short === short))
   .filter(Boolean);
 
-const positioningPrinciples = [
-  { title: "Качественно", text: "Экспертиза, точность и профессиональный опыт в каждом контакте с аудиторией." },
-  { title: "Просто", text: "Понятный путь к мерам поддержки, цифровым сервисам и практическим решениям." },
-  { title: "Выгодно", text: "Льготы, инфраструктура и условия, которые усиливают экономику проектов." },
-  { title: "Надежно", text: "Ответственная поддержка граждан и бизнеса в долгих сценариях развития." },
-];
-
 const textRecommendationImages = [
   { title: "Кавычки", caption: "Контроль русских кавычек «елочки» и вложенных „лапок“.", file: "text-recommendation-1.png" },
   { title: "Тире", caption: "Разделение длинного тире в предложении и среднего тире в числовых интервалах.", file: "text-recommendation-2.png" },
@@ -124,4 +117,4 @@ const textRecommendationImages = [
   { title: "Финальная проверка", caption: "Пробелы, служебные слова и знаки приводятся к единому наборному стандарту.", file: "text-recommendation-8.png" },
 ];
 
-export { primaryPalette, colorHeroTiles, colorHeroHoldDuration, smoothStepEase, colorHeroTileStates, secondaryPalette, regimes, subsidiaryHeroLogos, regimeNotes, regimeColorCoding, positioningPrinciples, textRecommendationImages };
+export { primaryPalette, colorHeroTiles, colorHeroHoldDuration, smoothStepEase, colorHeroTileStates, secondaryPalette, regimes, subsidiaryHeroLogos, regimeNotes, regimeColorCoding, textRecommendationImages };

@@ -54,12 +54,7 @@
 .font-style-chips > span,
 .font-size-control span,
 .font-size-control strong,
-.font-preview-meta,
-.font-current-file > span,
-.font-file-link,
-.font-download-family > div > span,
-.font-download-family > div > p,
-.font-archive-link em {
+.font-preview-meta {
   font-family: var(--mono);
   font-size: 12px;
   line-height: 1.25;
