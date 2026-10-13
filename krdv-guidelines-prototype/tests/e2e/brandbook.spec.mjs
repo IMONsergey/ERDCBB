@@ -226,7 +226,7 @@ test("keyboard skip control and route titles remain accessible", async ({ page }
   await expect(page.locator(".skip-to-content")).toBeFocused();
   await page.keyboard.press("Enter");
   await expect(page.locator("#page")).toBeFocused();
-  await page.locator(".directory-card").filter({ hasText: "Логотип" }).click();
+  await page.getByRole("button", { name: "Открыть раздел Логотип", exact: true }).click();
   await expect(page.locator(".hero-title")).toHaveText("Логотип");
   await expect(page).toHaveTitle("Логотип — брендбук КРДВ");
   await expect(page.locator("#page")).toBeFocused();
