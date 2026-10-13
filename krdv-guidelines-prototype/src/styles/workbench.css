@@ -392,6 +392,8 @@
 }
 
 .typograf-demo p {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
   min-height: 180px;
   margin: 0;
   border: 1px solid var(--line);

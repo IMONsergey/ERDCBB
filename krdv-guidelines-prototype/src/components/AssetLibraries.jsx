@@ -15,7 +15,7 @@ function LogoLibrary({ items }) {
           return (
             <motion.article className={`logo-card is-${variant.kind}`} key={variant.preview} layout whileHover={{ y: -2 }}>
               <div className="logo-preview">
-                <img src={logoAsset(variant.preview)} alt={t(variant.title)} loading="lazy" />
+                <img src={logoAsset(variant.preview)} alt={t(variant.title)} loading="lazy" decoding="async" />
               </div>
               <div className="logo-card-copy">
                 <span>{t(variant.role)}</span>
@@ -56,7 +56,7 @@ function SubsidiaryLogoLibrary({ setId }) {
         {items.map((item) => (
           <motion.article className={`subsidiary-logo-card is-${item.orientation}`} key={item.preview} layout whileHover={{ y: -2 }}>
             <div className="subsidiary-logo-preview">
-              <img src={subsidiaryAsset(item.preview)} alt={t(item.title)} loading="lazy" />
+              <img src={subsidiaryAsset(item.preview)} alt={t(item.title)} loading="lazy" decoding="async" />
             </div>
             <div className="subsidiary-logo-copy">
               <span>{t(item.versionLabel)}</span>
@@ -91,7 +91,7 @@ function RegimeSignLibrary() {
         {regimeSignLogos.map((item) => (
           <motion.article className="regime-sign-card" key={item.slug} style={{ "--sign-color": item.color }} layout whileHover={{ y: -2 }}>
             <div className="regime-sign-preview">
-              <img src={regimeSignAsset(item.preview)} alt={t(item.short)} loading="lazy" />
+              <img src={regimeSignAsset(item.preview)} alt={t(item.short)} loading="lazy" decoding="async" />
             </div>
             <div className="regime-sign-copy">
               <span>{t(item.short)}</span>
@@ -120,7 +120,7 @@ function MadeSignLibrary() {
         {madeSignVariants.map((item) => (
           <motion.article className="made-sign-card" data-tone={item.tone} key={item.slug} layout whileHover={{ y: -2 }}>
             <div className="made-sign-preview">
-              <img src={madeSignAsset(item.preview)} alt={t(item.title)} loading="lazy" />
+              <img src={madeSignAsset(item.preview)} alt={t(item.title)} loading="lazy" decoding="async" />
             </div>
             <div className="made-sign-copy">
               <span>{t("Знак")}</span>
@@ -190,7 +190,7 @@ function AssetImageGrid({ items, mode = "grid" }) {
         {items.map((item) => (
           <motion.article className={`asset-image-card ${item.wide ? "is-wide" : ""} ${item.contained ? "is-contained" : ""} ${item.embeddedText ? "has-embedded-text" : ""}`} key={item.file} layout whileHover={{ y: -2 }}>
             <div className="asset-image-frame">
-              <img src={rasterAsset(item.file)} alt={t(item.title)} loading="lazy" />
+              <img src={rasterAsset(item.file)} alt={t(item.title)} loading="lazy" decoding="async" />
             </div>
             {item.embeddedText || imagesOnly ? null : (
               <div className="asset-image-copy">

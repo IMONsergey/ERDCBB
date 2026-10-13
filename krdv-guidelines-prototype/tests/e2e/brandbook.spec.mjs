@@ -242,3 +242,38 @@ test("subnavigation expands and adapts without fixed pixel heights", async ({ pa
   await page.setViewportSize({ width: isMobile ? 320 : 1024, height: 700 });
   await expect.poll(() => submenu.evaluate(node => node.getBoundingClientRect().height)).toBeGreaterThan(80);
 });
+
+test("typographer keeps explicit paragraph breaks", async ({ page }) => {
+  await page.goto("/#/text");
+  await ready(page);
+  await page.locator(".typograf-demo textarea").fill("АО КРДВ\n10 кг");
+  const result = await page.locator(".typograf-demo p").textContent();
+  expect(result).toBe("АО\u00a0КРДВ\n10\u00a0кг");
+});
+
+test("small mobile, tablet, desktop layouts have no horizontal overflow", async ({ page }) => {
+  for (const width of [320, 768, 1024, 1440]) {
+    await page.setViewportSize({ width, height: 760 });
+    await page.goto("/#/logo");
+    await ready(page);
+    const sizes = await page.locator("#page").evaluate(el => ({
+      content: el.scrollWidth,
+      viewport: el.clientWidth,
+    }));
+    expect(sizes.content, "Overflow at " + width + "px").toBeLessThanOrEqual(sizes.viewport + 2);
+  }
+});
+
+test("print layout exposes hidden-by-scroll sections", async ({ page }) => {
+  await page.goto("/#/logo");
+  await ready(page);
+  await page.emulateMedia({ media: "print" });
+  const metrics = await page.locator("#page").evaluate(el => ({
+    overflow: getComputedStyle(el).overflow,
+    opacity: getComputedStyle(el.querySelector(".content-section")).opacity,
+    sidebar: getComputedStyle(document.querySelector(".sidebar")).display,
+  }));
+  expect(metrics.overflow).toBe("visible");
+  expect(metrics.opacity).toBe("1");
+  expect(metrics.sidebar).toBe("none");
+});

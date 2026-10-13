@@ -472,3 +472,16 @@
     transform: none !important;
   }
 }
+
+/* Dynamic browser chrome must not hide the last navigation item on mobile. */
+@supports (height: 100dvh) {
+  .guideline-shell, .page-scroll, .sidebar, .brand-preloader {
+    height: 100dvh;
+  }
+}
+@media (max-width: 860px) {
+  .mobile-menu-button {
+    top: max(12px, env(safe-area-inset-top));
+    right: max(12px, env(safe-area-inset-right));
+  }
+}
