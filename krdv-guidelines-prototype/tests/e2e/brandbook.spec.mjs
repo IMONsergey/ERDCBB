@@ -353,3 +353,17 @@ test("clipboard fallback restores keyboard focus to the clicked control", async 
   await expect(swatch.locator(".copy-action")).toContainText("Скопировано");
   await expect(swatch).toBeFocused();
 });
+
+test("mobile menu targets retain comfortable touch sizes", async ({ page, isMobile }) => {
+  test.skip(!isMobile, "Applies to mobile drawer controls");
+  await page.goto("/#/logo");
+  await ready(page);
+  await page.locator(".mobile-menu-button").click();
+  const size = await page.locator(".nav-group.is-open").evaluate(group => {
+    const parent = group.querySelector(".nav-parent");
+    const child = group.querySelector(".nav-children button");
+    return { parent: parent.getBoundingClientRect().height, child: child.getBoundingClientRect().height };
+  });
+  expect(size.parent).toBeGreaterThanOrEqual(44);
+  expect(size.child).toBeGreaterThanOrEqual(44);
+});

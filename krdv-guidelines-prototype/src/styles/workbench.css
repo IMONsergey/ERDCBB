@@ -577,3 +577,10 @@
 .end-links button:last-child:focus-visible em {
   transform: translateX(4px);
 }
+
+/* Visible keyboard focus takes precedence over generic :focus border resets. */
+.font-preview-input input:focus-visible,
+.typograf-demo textarea:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 2px;
+}

@@ -452,4 +452,13 @@
     top: max(12px, env(safe-area-inset-top));
     right: max(12px, env(safe-area-inset-right));
   }
+  .nav-parent,
+  .nav-children button {
+    min-height: 44px;
+  }
+}
+@media (pointer: coarse) {
+  button, a {
+    touch-action: manipulation;
+  }
 }
