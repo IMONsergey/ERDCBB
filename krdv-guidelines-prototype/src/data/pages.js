@@ -164,7 +164,6 @@ const pagesData = [
     id: "regimes",
     number: "04",
     title: "Режимы",
-    directoryTitle: "Преференциальные режимы",
     heroImage: "cover-regimes.jpg",
     directoryTitle: "Преференциальные режимы",
     directoryDescription: "Знаки, программы и цветовое кодирование преференциальных режимов.",
