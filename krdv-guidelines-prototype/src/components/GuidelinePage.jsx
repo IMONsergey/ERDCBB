@@ -16,7 +16,7 @@ function GuidelinePage({ page, activePageId, navigate }) {
 
   return (
     <article className="guideline-page">
-      <header className={`hero-band ${hasMediaHero ? "is-media" : ""} ${hasAnimatedHero ? "is-animated" : ""} ${hasSubsidiaryHero ? "is-subsidiary" : ""} ${hasLibraryHero ? "is-library" : ""} ${hasStillHero ? "is-still-cover" : ""}`} aria-label={t(page.title)}>
+      <header className={`hero-band ${hasMediaHero ? "is-media" : ""} ${hasAnimatedHero ? "is-animated" : ""} ${hasSubsidiaryHero ? "is-subsidiary" : ""} ${hasLibraryHero ? "is-library" : ""} ${hasStillHero ? "is-still-cover" : ""}`} aria-label={t(page.title)} data-solid-cover={Boolean(page.heroSolid)}>
         {page.heroImage ? <img className="hero-still-image" src={heroAsset(page.heroImage)} alt="" aria-hidden="true" decoding="async" fetchPriority="high" /> : null}
         {page.heroVideo ? <SmartVideo className="hero-video" filename={page.heroVideo} /> : null}
         {page.heroAnimation === "colorTiles" ? <ColorHeroAnimation /> : null}

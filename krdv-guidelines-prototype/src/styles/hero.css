@@ -365,3 +365,9 @@
   line-height: 1.05;
   overflow-wrap: anywhere;
 }
+
+/* Contact chapter is intentionally plain, matching the separate navy header in Figma. */
+.hero-band[data-solid-cover="true"] {
+  height: 280px;
+  background: #001d37;
+}

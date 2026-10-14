@@ -11,12 +11,6 @@ const pagesData = [
     intro: "Руководство по визуальной системе АО «КРДВ»: логотип, цвета, типографика, фотостиль, носители и материалы для скачивания.",
     sections: [
       {
-        id: "guide",
-        title: "Руководство",
-        lead: "Руководство по использованию фирменного стиля АО «КРДВ».",
-        paragraphs: ["Единые правила помогают сохранять узнаваемость корпорации во внутренних и внешних коммуникациях, печатных материалах, презентациях, рекламных носителях и цифровой среде."],
-      },
-      {
         id: "contents",
         title: "Содержание",
         lead: "Руководство по использованию фирменного стиля АО «КРДВ».",
@@ -442,7 +436,7 @@ const pagesData = [
     number: "10",
     title: "Мерч",
     heroImage: "cover-merch.jpg",
-    directoryDescription: "Все 41 слайда презентации с примерами брендированной продукции.",
+    directoryDescription: "41 слайд презентации с примерами брендированной продукции.",
     intro: "Примеры брендированной продукции КРДВ и дочерних обществ.",
     sections: [
       {
@@ -501,7 +495,7 @@ const pagesData = [
   {
     id: "made",
     number: "11",
-    title: "Сделано в ТОР СПВ",
+    title: "Товарный знак",
     heroImage: "cover-made.jpg",
     directoryDescription: "Товарные знаки регионального происхождения продукции.",
     intro: "Фирменные знаки «Сделано в ТОР СПВ» и «Сделано на Дальнем Востоке и в Арктике»: версии, скачивание и примеры использования.",
@@ -578,7 +572,7 @@ const pagesData = [
           "Неподходящий кадр: участники не вовлечены, людей много и лица не в фокусе, композиция неудачная, на переднем плане затылки или обилие текстур мешает считыванию.",
         ],
         assetImages: photostyleImages.events,
-        photoCredit: { author: "Максим Блинов", source: "Фотохост-агентство РИА Новости" },
+        photoCredit: { author: "Максим Блинов", source: "Фото-хост-агентство РИА Новости" },
       },
       {
         id: "nature",
@@ -608,9 +602,9 @@ const pagesData = [
   {
     id: "appendix",
     number: "13",
-    title: "Приложение",
+    title: "Дизайн соцсетей",
     heroImage: "cover-appendix.jpg",
-    directoryDescription: "Гайд по оформлению соцсетей и контакты КРДВ.",
+    directoryDescription: "Гайд по дизайну публикаций и карточек в социальных сетях КРДВ.",
     intro: "Гайд по оформлению публикаций в соцсетях.",
     sections: [
       {
@@ -619,6 +613,16 @@ const pagesData = [
         paragraphs: ["Гайд помогает сохранять узнаваемый визуальный язык в постах, карточках, обложках и регулярных публикациях КРДВ."],
         resourceLinks: ["socialGuide"],
       },
+    ],
+  },
+  {
+    id: "contacts",
+    number: "14",
+    title: "Контакты",
+    heroSolid: true,
+    directoryDescription: "Информация об АО «КРДВ», дата обновления брендбука и обратная связь.",
+    intro: "Контактная информация и обратная связь по фирменному стилю КРДВ.",
+    sections: [
       {
         id: "contacts",
         title: "Контакты",
@@ -648,6 +652,7 @@ const routeAliases = {
   editorial: "text",
   graphics: "regimes",
   social: "appendix",
+  contact: "contacts",
   gallery: "overview",
   typography: "typography",
   color: "color",
@@ -660,7 +665,9 @@ const routeAliases = {
 };
 
 function resolvePageId(hash) {
-  const route = String(hash || "").replace(/^#\/?/, "").split("/")[0];
+  const fragments = String(hash || "").replace(/^#\/?/, "").split("/");
+  const route = fragments[0];
+  if (route === "appendix" && fragments[1] === "contacts") return "contacts";
   const normalized = routeAliases[route] || route;
   return pagesById[normalized] ? normalized : "overview";
 }
