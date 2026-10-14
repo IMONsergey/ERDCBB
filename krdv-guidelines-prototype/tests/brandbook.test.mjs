@@ -1,10 +1,11 @@
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
 import { pagesData, pagesById, resolvePageId, routeAliases } from "../src/data/pages.js";
-import { downloadResources, logoVariants, subsidiaryLogos, regimeSignLogos, madeSignVariants, fontFamilies } from "../src/data/resources.js";
+import { downloadResources, logoVariants, subsidiaryLogos, regimeSignLogos, madeSignVariants, madeFarEastVariants, fontFamilies } from "../src/data/resources.js";
 import { typograf } from "../src/lib/typograf.js";
 const publicRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../public");
 function asset(relativeFile) {
@@ -40,6 +41,7 @@ test("all downloadable logos, marks, fonts, imagery and videos exist", () => {
     ["assets/subsidiaries/", subsidiaryLogos],
     ["assets/regime-signs/", regimeSignLogos],
     ["assets/made-signs/", madeSignVariants],
+    ["assets/made-signs/", madeFarEastVariants],
   ];
   for (const [prefix, items] of collections) for (const item of items) {
     asset(prefix + item.preview);
@@ -136,3 +138,23 @@ test("all fourteen sections have an intentional cover; nine editorial JPEGs keep
     if (page.heroImage) assert.match(page.heroImage, /^cover-[a-z-]+\.jpg$/);
   }
 });
+
+test("regional logo SVG sources remain byte-identical to the four supplied files", () => {
+  const originals = {
+    "made-dvia-en-purple": "27db903767444f604331b046eef7288e623e7474",
+    "made-dvia-ru-purple": "adc683614f714c699d853b46d7a454a7f920d63c",
+    "made-dvia-en-black": "13321a1188f5b1699e889934e5555b35520778c6",
+    "made-dvia-ru-black": "6f9fe124eaca2fcfd00d6a4cb5e33345dca18445",
+  };
+  assert.equal(madeFarEastVariants.length, 4);
+  for (const item of madeFarEastVariants) {
+    const svg = readFileSync(path.join(publicRoot, "assets/made-signs", item.preview));
+    const blobHash = createHash("sha1").update("blob " + svg.length + "\0").update(svg).digest("hex");
+    assert.equal(blobHash, originals[item.slug], "Original SVG changed: " + item.slug);
+    assert.deepEqual(Object.keys(item.files), ["svg"]);
+    assert.match(svg.toString("utf8"), /viewBox="0 0 159\.45 231\.04"/);
+  }
+  assert.equal(pagesById.made.sections.find((s) => s.id === "made-far-east")?.madeFarEastSigns, true);
+  assert.equal(downloadResources.madeFarEastSigns.url, "https://disk.yandex.ru/d/w1QaGJWiVcbf7Q");
+});
+
