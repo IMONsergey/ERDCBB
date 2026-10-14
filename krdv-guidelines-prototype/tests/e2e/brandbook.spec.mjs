@@ -452,3 +452,36 @@ test("ten current leaflet covers display uncropped and open full-size PNG", asyn
   const cols = await gallery.evaluate((el) => getComputedStyle(el).gridTemplateColumns.split(" ").filter(Boolean).length);
   expect(cols).toBe(isMobile ? 2 : 5);
 });
+
+test("merch page presents real examples from working Miro board without retired cards", async ({ page, isMobile }) => {
+  await page.goto("/#/merch");
+  await ready(page);
+  const section = page.locator("#examples");
+  await expect(section).toHaveCount(1);
+  await expect(section).toContainText("Мерч разрабатывается и актуализируется ДВК");
+  await expect(section).toContainText("Предложения и пожелания");
+  for (const id of ["carriers", "package", "tshirt", "shopper"]) {
+    await expect(page.locator("#" + id)).toHaveCount(0);
+  }
+  await expect(section.locator(".merch-gallery-card")).toHaveCount(12);
+  const miro = section.getByRole("link", { name: /Все материалы в Miro/ });
+  await expect(miro).toHaveAttribute("href", "https://miro.com/app/board/uXjVONM6M_s=/?share_link_id=455530323654");
+  await expect(miro).toHaveAttribute("target", "_blank");
+  const first = section.locator(".merch-gallery-card").first();
+  await first.scrollIntoViewIfNeeded();
+  const img = first.locator("img");
+  await expect.poll(() => img.evaluate((el) => el.complete && el.naturalWidth === 1280)).toBe(true);
+  await expect(img).toHaveCSS("object-fit", "contain");
+  await expect(first).toHaveAttribute("target", "_blank");
+  const response = await page.request.get(await first.getAttribute("href"));
+  expect(response.ok()).toBeTruthy();
+  expect(response.headers()["content-type"]).toMatch(/image\/jpeg/);
+  const columns = await section.locator(".merch-gallery").evaluate((el) =>
+    getComputedStyle(el).gridTemplateColumns.split(" ").filter(Boolean).length
+  );
+  expect(columns).toBe(isMobile ? 1 : 3);
+  const viewport = await page.locator("#page").evaluate((el) => ({
+    width: el.clientWidth, scrollWidth: el.scrollWidth,
+  }));
+  expect(viewport.scrollWidth).toBeLessThanOrEqual(viewport.width + 2);
+});
