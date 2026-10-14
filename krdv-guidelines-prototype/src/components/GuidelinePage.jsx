@@ -69,6 +69,7 @@ function ContentSection({ section, navigate, activePageId }) {
         {section.regimePalette ? <RegimePalette items={section.regimePalette} /> : null}
         {section.regimeSigns ? <RegimeSignLibrary /> : null}
         {section.madeSigns ? <MadeSignLibrary /> : null}
+        {section.madeFarEastSigns ? <MadeSignLibrary variantSet="far-east" /> : null}
         {section.assetImages ? <AssetImageGrid items={section.assetImages} mode={section.assetImageMode} /> : null}
         {cardsAfterAssets ? <CardGrid items={section.cards} /> : null}
         {section.photoCredit ? (

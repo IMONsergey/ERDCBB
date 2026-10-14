@@ -279,7 +279,13 @@
 }
 
 .made-sign-card[data-tone="black"] .made-sign-preview {
-  background: #101010;
+  background: #424242;
+}
+
+.made-sign-card[data-tone="black"] .made-sign-preview img {
+  border-radius: 12px;
+  outline: 1px solid rgba(255, 255, 255, 0.9);
+  outline-offset: 1px;
 }
 
 .made-sign-card[data-tone="white"] .made-sign-preview {
@@ -707,4 +713,20 @@
 .type-specimen.is-tsars p {
   font-family: "TT Tsars", Georgia, serif;
   font-weight: 400;
+}
+
+/* Keep the new 120×175-style regional marks together without oversized cards. */
+.made-sign-library.is-far-east {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.made-sign-library.is-far-east .made-sign-card {
+  min-height: 302px;
+  grid-template-rows: 186px 1fr;
+}
+.made-sign-library.is-far-east .made-sign-preview {
+  padding: 14px;
+}
+.made-sign-library.is-far-east .made-sign-preview img {
+  max-width: 120px;
+  max-height: 166px;
 }

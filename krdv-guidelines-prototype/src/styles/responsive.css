@@ -481,3 +481,14 @@
     line-height: 1.08;
   }
 }
+
+@media (max-width: 1180px) {
+  .made-sign-library.is-far-east {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 580px) {
+  .made-sign-library.is-far-east {
+    grid-template-columns: 1fr;
+  }
+}
