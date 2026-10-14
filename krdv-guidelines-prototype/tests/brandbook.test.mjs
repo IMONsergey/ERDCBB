@@ -15,7 +15,7 @@ function asset(relativeFile) {
   assert.ok(statSync(full).size > 0, "Empty: " + relativeFile);
 }
 test("pages and sections have unique stable identities", () => {
-  assert.equal(pagesData.length, 14);
+  assert.equal(pagesData.length, 15);
   assert.equal(new Set(pagesData.map((p) => p.id)).size, pagesData.length);
   pagesData.forEach((page, index) => {
     assert.equal(page.number, String(index).padStart(2, "0"));
@@ -34,6 +34,7 @@ test("canonical and historic routes resolve to real pages", () => {
     assert.equal(resolvePageId("#/" + alias), target);
   }
   assert.equal(resolvePageId("#/invalid"), "overview");
+  assert.equal(resolvePageId("#/appendix/contacts"), "contacts");
 });
 test("all downloadable logos, marks, fonts, imagery and videos exist", () => {
   const collections = [
@@ -86,9 +87,15 @@ test("approved editorial changes are represented in the page data", () => {
   assert.equal(pagesById.positioning.sections.find((s) => s.id === "principles").cards, undefined);
   assert.equal(pagesById.typography.sections.some((s) => s.id === "font-files"), false);
   assert.equal(pagesById.advertising.sections.some((s) => s.id === "presswall"), false);
-  assert.equal(pagesById.appendix.sections.find((s) => s.id === "social").assetImages, undefined);
-  assert.equal(pagesById.appendix.sections.find((s) => s.id === "contacts").contacts.updatedAt, "2026-11-01");
+  assert.equal(pagesById.overview.sections.some((s) => s.id === "guide"), false);
+  assert.equal(pagesById.made.title, "Товарный знак");
+  assert.equal(pagesById.appendix.title, "Дизайн соцсетей");
+  assert.equal(pagesById.appendix.sections.length, 1);
+  assert.equal(pagesById.appendix.sections[0].assetImages, undefined);
+  assert.equal(pagesById.contacts.title, "Контакты");
+  assert.equal(pagesById.contacts.sections[0].contacts.updatedAt, "2026-11-01");
   assert.equal(pagesById.photostyle.sections.find((s) => s.id === "events").photoCredit.author, "Максим Блинов");
+  assert.deepEqual(pagesById.photostyle.sections.find((s) => s.id === "events").assetImages.map((item) => item.file), ["photostyle-composition-7.webp"]);
   for (const page of pagesData) {
     assert.ok(page.directoryDescription?.length > 15 && page.directoryDescription.length < 100);
   }
@@ -134,11 +141,11 @@ test("public download resources are accessible share links, not internal login f
   assert.equal(businessCard.resourceLinks, undefined);
 });
 
-test("all fourteen sections have an intentional cover; nine editorial JPEGs keep original logo assets untouched", () => {
+test("all fifteen chapters have intentional covers without changing original logo assets", () => {
   const illustrated = ["positioning","regimes","typography","text","corporate","advertising","merch","made","appendix"];
   assert.deepEqual(pagesData.filter(p => p.heroImage).map(p => p.id), illustrated);
   for (const page of pagesData) {
-    assert.ok(page.heroVideo || page.heroImage || page.heroAnimation || page.heroLibrary, "Missing cover: " + page.id);
+    assert.ok(page.heroVideo || page.heroImage || page.heroAnimation || page.heroLibrary || page.heroSolid, "Missing cover: " + page.id);
     if (page.heroImage) assert.match(page.heroImage, /^cover-[a-z-]+\.jpg$/);
   }
 });

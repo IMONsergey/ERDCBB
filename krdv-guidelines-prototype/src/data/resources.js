@@ -324,7 +324,6 @@ const photostyleImages = {
     { title: "Инфраструктура города", caption: "Мост, портовый и городской масштаб Дальнего Востока.", file: "photostyle-composition-12.webp" },
   ],
   events: [
-    { title: "Деловой стенд", caption: "Коммуникационный кадр с выставки или форума.", file: "photostyle-composition-6.webp" },
     { title: "Вовлеченная аудитория", caption: "Событие с участниками, которые включены в процесс.", file: "photostyle-composition-7.webp" },
   ],
   nature: [

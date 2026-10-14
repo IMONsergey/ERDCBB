@@ -183,7 +183,7 @@
   min-width: 0;
   min-height: 330px;
   display: grid;
-  grid-template-rows: 132px 1fr;
+  grid-template-rows: 132px auto;
   border: 1px solid var(--line);
   padding: 0;
   background: #ffffff;
@@ -291,10 +291,6 @@
   background: linear-gradient(90deg, #001d37 0 51%, #0056a2 51% 86%, #de2327 86%);
 }
 
-.directory-visual.has-cover + .directory-copy p {
-  -webkit-line-clamp: 2;
-}
-
 .directory-copy {
   display: grid;
   grid-template-columns: 1fr;
@@ -317,19 +313,15 @@
 }
 
 .directory-copy p {
-  display: -webkit-box;
   width: 100%;
   min-width: 0;
   max-width: 100%;
-  overflow: hidden;
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
   hyphens: auto;
   white-space: normal;
   color: var(--muted);
   font-size: 15px;
   line-height: 1.4;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
 }
 
 .directory-copy small {
@@ -564,4 +556,9 @@
   height: 100%;
   object-fit: cover;
   object-position: center 58%;
+}
+
+/* The independent contacts chapter uses its own restrained navy cover. */
+.directory-visual[data-topic="contacts"] .directory-fallback {
+  background: #001d37;
 }

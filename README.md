@@ -21,7 +21,7 @@ npm run test:e2e
 ```
 
 - `npm run check`: production build, проверки контента и ассетов, тесты Sites Worker.
-- `npm run test:e2e`: Playwright Chromium, Firefox, WebKit и эмуляция iOS; 14 страниц, навигация, скролл, палитры, работа анимаций и ошибки доступа к буферу обмена.
+- `npm run test:e2e`: Playwright Chromium, Firefox, WebKit и эмуляция iOS; 15 страниц, навигация, скролл, палитры, работа анимаций и ошибки доступа к буферу обмена.
 - `GITHUB_PAGES=true npm run build`: production build с базовым URL /ERDCBB/.
 - `npm run optimize:video`: отдельная команда обработки видео (не запускается при обычной сборке).
 
