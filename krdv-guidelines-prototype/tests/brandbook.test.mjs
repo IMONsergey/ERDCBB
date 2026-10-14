@@ -192,7 +192,7 @@ test("updated leaflet gallery preserves all ten current originals byte for byte"
   assert.ok(!leaflets.assetImages.some((item) => /leaflets-layout-/.test(item.file)));
 });
 
-test("current merch is a working reference gallery, not a fixed catalog", () => {
+test("full merchandise archive is shown without omitting any of the 41 original slides", () => {
   const merch = pagesById.merch;
   assert.equal(merch.sections.length, 1);
   const examples = merch.sections[0];
@@ -200,25 +200,61 @@ test("current merch is a working reference gallery, not a fixed catalog", () => 
   assert.equal(examples.merchBoard, undefined);
   assert.ok(examples.paragraphs.some((text) => text.includes("актуализируется ДВК")));
   assert.ok(examples.paragraphs.some((text) => text.includes("пожелания")));
-  assert.equal(examples.merchGallery.length, 12);
+  assert.equal(examples.merchGallery.length, 41);
+  assert.deepEqual(examples.merchGallery.map((item) => item.slide), Array.from({ length: 41 }, (_, i) => i + 2));
   const originals = {
+    "merch-slide-02.jpg": "dcf6ecc7ccc14bff1671d9899bcb5c9076d0aa736015aeeb77943a6f5def1901",
     "merch-slide-03.jpg": "b87899e4561e4b9fbe4c650b3010460141ea5d4d4f389672d4113e298dde9150",
+    "merch-slide-04.jpg": "dd890ddc5543bdccd4b6edfd9e95457b0736cf75d5ec5bccb08bfc02e6e2d029",
     "merch-slide-05.jpg": "39d98b6bc855dcbd8d93e0368f1a625f1a87aa849ba5887aede00d6d2b8b982c",
+    "merch-slide-06.jpg": "8a3f639c618ce51b8b986e8d26aa4c3bd6c9a52508a374a4a928d9375eca6ded",
+    "merch-slide-07.jpg": "045b27cb5882ce0642161c3d14123893af8aff578cc28b5f686968dd89936508",
     "merch-slide-08.jpg": "4ccd354c655cad835508b9ba02199270383e45006831595e73b0e4074bd197b1",
+    "merch-slide-09.jpg": "c706daa9f4e2cf321b5ef73adc3927c8caabb77c70ac8ecc68de95f947be4662",
     "merch-slide-10.jpg": "2e2d0be7f5df64d2a379748996fed8913dd02fbeb433bded0f674efb2f1dccd3",
+    "merch-slide-11.jpg": "0239edf8867712aa43e3e83f940679974601890d4aef9ea64b5a408016600cf0",
     "merch-slide-12.jpg": "06a919b584feef8e6250fd8d1791f5579503196f83dd956e9a9d67514c7597cb",
+    "merch-slide-13.jpg": "fbbc4ca0478a0ff5b7a0b9d04f747d905ec8723f9f1cdd4f19062bfd48f915ec",
+    "merch-slide-14.jpg": "9df2b3df13701f361813b7f9298b98cefc35d7d71d53acfb7fbc6775d1a96534",
     "merch-slide-15.jpg": "fab332a9541d09a303f87ca4c620db1db37ba52ace0c2b477408e3e45466bf8d",
     "merch-slide-16.jpg": "4444b83e96821ec706c0570bf5606faae4c11603ba38699c7c9d14204f6c0787",
+    "merch-slide-17.jpg": "e505bb15ba3012176663a9b72b38ee70a508519796bd9844627923ce0ccecf6b",
+    "merch-slide-18.jpg": "c29225cacb2d126530f01c3415c274041232a337600ec809fe36311558f16b22",
     "merch-slide-19.jpg": "f7eda38004cf70374ccef84e7f5134fb60407190b40823bc9dc775fa0d6e3a2b",
+    "merch-slide-20.jpg": "3058c80aeea8f715e0cdb2a7c7f6f330801d5ebf1a97fe6c7907075c81fd4bf5",
+    "merch-slide-21.jpg": "c3e263e2a624d7ef6fa9191ec8e716da6e4f3ccd78f863ec3a6c81788f709b6a",
+    "merch-slide-22.jpg": "8187f17eef35eae74580f7d008397096071dbbb7aac0a6835e02edb0bcc6dbfd",
     "merch-slide-23.jpg": "6fae769c9a6f9cf382ca3b0f4ded8964c95d604408ac780027fe7708a76bd25d",
+    "merch-slide-24.jpg": "632862f9549f08047a9a455ee981b4965ac018f0e901808c57adede986d8376c",
+    "merch-slide-25.jpg": "85f208dadb5e5e52a53afe4c89ab7ea6d16e1a2ce26938bc5cc7a65296b291ac",
+    "merch-slide-26.jpg": "c706daa9f4e2cf321b5ef73adc3927c8caabb77c70ac8ecc68de95f947be4662",
+    "merch-slide-27.jpg": "622489826fd86b440d7377f37dcb436904d8676c458738bcc45d1bbeb7ed3d52",
+    "merch-slide-28.jpg": "56148532ff796240d9092b8dd3433a59f2775ba3cb85b9952fb205149505b0ea",
+    "merch-slide-29.jpg": "2d7399f857e27548e67059e5433afecbfb73eeaceca8e56665e0bd46c6a029c2",
+    "merch-slide-30.jpg": "9ae7489b088544f5044434ee2965c137af76dc6e22a683513f0a5a120d6d9eb6",
+    "merch-slide-31.jpg": "3081596da6fbb06dbbd985837d555db3bc1f4ddcee7c96612b4d6012f0a870b8",
+    "merch-slide-32.jpg": "6f9555a249bed96270bd11c54425c1add20b68a2ab6db7ee41534f68fd4769be",
+    "merch-slide-33.jpg": "4faefc78ca01381948784532af4c2580da683c8d8cdd2cd015fab403d902833b",
     "merch-slide-34.jpg": "df20703e0f40a4ebd2da85ddb9b2a0a80c0440e7f8d086704ab4e161d5bb4dde",
+    "merch-slide-35.jpg": "0469ab6d69f94423f7b5798e4b0f41671427be6a64724edfe53a71c90a325d0c",
+    "merch-slide-36.jpg": "67f333b6ff7b4ef0667931128ce691d0251589430f3afcc5a83792746863423f",
     "merch-slide-37.jpg": "7527946f91a1e56b4c185dea9b73c9bcfcb16d82b86d8eb7fea6ccc93e379c20",
+    "merch-slide-38.jpg": "838080448f81772f713c4745357b739cdfb10bef756af38023a59f6a9813e4d8",
+    "merch-slide-39.jpg": "3ceb98572a858ae2ef7b9350fffe2cb596b038df53f8ebe8269ef7f6217f9164",
+    "merch-slide-40.jpg": "abbfc558008823e522f3583c7c74da605298cc71aed62008206ebf65e5460069",
+    "merch-slide-41.jpg": "ad1c45f23d7045e954f7815c29df51b29d80d8a0765ed116e73cb97b9d977bce",
     "merch-slide-42.jpg": "4f0f0838069a61d59414efb5203195a654686b40cf2226fbe961f7afec884893"
 };
   assert.deepEqual(new Set(examples.merchGallery.map((item) => item.file)), new Set(Object.keys(originals)));
   for (const item of examples.merchGallery) {
     const original = readFileSync(path.join(publicRoot, "assets/brandbook/raster", item.file));
-    assert.equal(createHash("sha256").update(original).digest("hex"), originals[item.file]);
+    assert.equal(createHash("sha256").update(original).digest("hex"), originals[item.file], "Original slide modified: " + item.file);
+    assert.equal(item.file, "merch-slide-" + String(item.slide).padStart(2, "0") + ".jpg");
     assert.equal(item.preview, item.file.replace(".jpg", ".webp"));
+    const preview = readFileSync(path.join(publicRoot, "assets/brandbook/raster", item.preview));
+    assert.equal(preview.toString("ascii", 0, 4), "RIFF");
+    assert.equal(preview.toString("ascii", 8, 12), "WEBP");
   }
+  // Two original title slides are identical; both source positions must survive.
+  assert.equal(originals["merch-slide-09.jpg"], originals["merch-slide-26.jpg"]);
 });

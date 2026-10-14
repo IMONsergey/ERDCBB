@@ -457,7 +457,7 @@ test("ten current leaflet covers display uncropped and open full-size PNG", asyn
   expect(cols).toBe(isMobile ? 2 : 5);
 });
 
-test("merch page shows its examples without an external board link or retired cards", async ({ page, isMobile }) => {
+test("merch includes all 41 source slides in original order and no external board link", async ({ page, isMobile }) => {
   await page.goto("/#/merch");
   await ready(page);
   const section = page.locator("#examples");
@@ -467,7 +467,14 @@ test("merch page shows its examples without an external board link or retired ca
   for (const id of ["carriers", "package", "tshirt", "shopper"]) {
     await expect(page.locator("#" + id)).toHaveCount(0);
   }
-  await expect(section.locator(".merch-gallery-card")).toHaveCount(12);
+  await expect(section.locator(".merch-gallery-card")).toHaveCount(41);
+  await expect(section.locator(".merch-showcase-toolbar")).toContainText("41");
+  const slideNumbers = await section.locator(".merch-gallery-index").allTextContents();
+  expect(slideNumbers).toEqual(Array.from({ length: 41 }, (_, i) => String(i + 2).padStart(2, "0")));
+  const slideLinks = section.locator(".merch-gallery-card");
+  await expect(slideLinks.first()).toHaveAttribute("href", /merch-slide-02\.jpg$/);
+  await expect(slideLinks.nth(24)).toHaveAttribute("href", /merch-slide-26\.jpg$/);
+  await expect(slideLinks.last()).toHaveAttribute("href", /merch-slide-42\.jpg$/);
   await expect(section.locator('a[href*="miro.com"]')).toHaveCount(0);
   const first = section.locator(".merch-gallery-card").first();
   await first.scrollIntoViewIfNeeded();
@@ -478,6 +485,12 @@ test("merch page shows its examples without an external board link or retired ca
   const response = await page.request.get(await first.getAttribute("href"));
   expect(response.ok()).toBeTruthy();
   expect(response.headers()["content-type"]).toMatch(/image\/jpeg/);
+  const last = slideLinks.last();
+  await last.scrollIntoViewIfNeeded();
+  const lastImage = last.locator("img");
+  await expect.poll(() => lastImage.evaluate((el) => el.complete && el.naturalWidth === 1280)).toBe(true);
+  const lastFullSize = await page.request.get(await last.getAttribute("href"));
+  expect(lastFullSize.ok()).toBeTruthy();
   const columns = await section.locator(".merch-gallery").evaluate((el) =>
     getComputedStyle(el).gridTemplateColumns.split(" ").filter(Boolean).length
   );

@@ -881,3 +881,19 @@
 @media (max-width: 580px) {
   .merch-gallery { grid-template-columns: 1fr; gap: 12px; }
 }
+
+/* Original presentation slide numbers identify every artwork, including repetitions. */
+.merch-gallery-label {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  min-width: 0;
+}
+
+.merch-gallery-index {
+  flex: none;
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
