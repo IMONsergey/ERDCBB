@@ -1,15 +1,11 @@
 import { rasterAsset, ICONS, t } from "../data/brandbook.js";
 import { UiIcon } from "./UiIcon.jsx";
 
-function MerchGallery({ items, boardUrl }) {
+function MerchGallery({ items }) {
   return (
     <div className="merch-showcase">
       <div className="merch-showcase-toolbar">
         <span>{t("Подборка примеров")} · {items.length}</span>
-        <a href={boardUrl} target="_blank" rel="noopener noreferrer">
-          {t("Все материалы в Miro")}
-          <UiIcon icon={ICONS.arrowRight} className="merch-link-arrow" />
-        </a>
       </div>
       <div className="merch-gallery">
         {items.map((item) => (
