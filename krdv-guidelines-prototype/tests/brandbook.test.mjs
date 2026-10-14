@@ -59,6 +59,10 @@ test("all downloadable logos, marks, fonts, imagery and videos exist", () => {
       for (const group of ["assetImages", "preAssetImages"]) {
         for (const image of section[group] || []) asset("assets/brandbook/raster/" + image.file);
       }
+      for (const image of section.merchGallery || []) {
+        asset("assets/brandbook/raster/" + image.file);
+        asset("assets/brandbook/raster/" + image.preview);
+      }
       for (const key of section.resourceLinks || []) assert.ok(downloadResources[key], "Missing resource " + key);
     }
   }
@@ -186,4 +190,35 @@ test("updated leaflet gallery preserves all ten current originals byte for byte"
     assert.equal(createHash("sha256").update(data).digest("hex"), expected[item.file], "Unexpected alteration of " + item.file);
   }
   assert.ok(!leaflets.assetImages.some((item) => /leaflets-layout-/.test(item.file)));
+});
+
+test("current merch is a working reference gallery, not a fixed catalog", () => {
+  const merch = pagesById.merch;
+  assert.equal(merch.sections.length, 1);
+  const examples = merch.sections[0];
+  assert.equal(examples.id, "examples");
+  assert.equal(examples.merchBoard, "https://miro.com/app/board/uXjVONM6M_s=/?share_link_id=455530323654");
+  assert.ok(examples.paragraphs.some((text) => text.includes("актуализируется ДВК")));
+  assert.ok(examples.paragraphs.some((text) => text.includes("пожелания")));
+  assert.equal(examples.merchGallery.length, 12);
+  const originals = {
+    "merch-slide-03.jpg": "b87899e4561e4b9fbe4c650b3010460141ea5d4d4f389672d4113e298dde9150",
+    "merch-slide-05.jpg": "39d98b6bc855dcbd8d93e0368f1a625f1a87aa849ba5887aede00d6d2b8b982c",
+    "merch-slide-08.jpg": "4ccd354c655cad835508b9ba02199270383e45006831595e73b0e4074bd197b1",
+    "merch-slide-10.jpg": "2e2d0be7f5df64d2a379748996fed8913dd02fbeb433bded0f674efb2f1dccd3",
+    "merch-slide-12.jpg": "06a919b584feef8e6250fd8d1791f5579503196f83dd956e9a9d67514c7597cb",
+    "merch-slide-15.jpg": "fab332a9541d09a303f87ca4c620db1db37ba52ace0c2b477408e3e45466bf8d",
+    "merch-slide-16.jpg": "4444b83e96821ec706c0570bf5606faae4c11603ba38699c7c9d14204f6c0787",
+    "merch-slide-19.jpg": "f7eda38004cf70374ccef84e7f5134fb60407190b40823bc9dc775fa0d6e3a2b",
+    "merch-slide-23.jpg": "6fae769c9a6f9cf382ca3b0f4ded8964c95d604408ac780027fe7708a76bd25d",
+    "merch-slide-34.jpg": "df20703e0f40a4ebd2da85ddb9b2a0a80c0440e7f8d086704ab4e161d5bb4dde",
+    "merch-slide-37.jpg": "7527946f91a1e56b4c185dea9b73c9bcfcb16d82b86d8eb7fea6ccc93e379c20",
+    "merch-slide-42.jpg": "4f0f0838069a61d59414efb5203195a654686b40cf2226fbe961f7afec884893"
+};
+  assert.deepEqual(new Set(examples.merchGallery.map((item) => item.file)), new Set(Object.keys(originals)));
+  for (const item of examples.merchGallery) {
+    const original = readFileSync(path.join(publicRoot, "assets/brandbook/raster", item.file));
+    assert.equal(createHash("sha256").update(original).digest("hex"), originals[item.file]);
+    assert.equal(item.preview, item.file.replace(".jpg", ".webp"));
+  }
 });

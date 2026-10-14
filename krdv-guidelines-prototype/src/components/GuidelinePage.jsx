@@ -3,6 +3,7 @@ import { motion } from "motion/react";
 import { ICONS, t, pagesData, heroAsset } from "../data/brandbook.js";
 import { HeroLogoLockup, ColorHeroAnimation, SubsidiaryHeroAnimation, LibraryHeroBackground } from "./Hero.jsx";
 import { UiIcon } from "./UiIcon.jsx";
+import { MerchGallery } from "./MerchGallery.jsx";
 import { LogoLibrary, SubsidiaryLogoLibrary, RegimeSignLibrary, MadeSignLibrary, ResourceLinks, AssetImageGrid } from "./AssetLibraries.jsx";
 import { RuleList, SpecGrid, PaletteGrid, TypeSpecimens, FontWorkbench, RegimePalette, TypografDemo, ContactBlock, ContactCta, EndLinks } from "./ContentBlocks.jsx";
 
@@ -71,6 +72,7 @@ function ContentSection({ section, navigate, activePageId }) {
         {section.madeSigns ? <MadeSignLibrary /> : null}
         {section.madeFarEastSigns ? <MadeSignLibrary variantSet="far-east" /> : null}
         {section.assetImages ? <AssetImageGrid items={section.assetImages} mode={section.assetImageMode} /> : null}
+        {section.merchGallery ? <MerchGallery items={section.merchGallery} boardUrl={section.merchBoard} /> : null}
         {cardsAfterAssets ? <CardGrid items={section.cards} /> : null}
         {section.photoCredit ? (
           <footer className="photo-credit" aria-label={t("Сведения об авторе фотографии")}>
