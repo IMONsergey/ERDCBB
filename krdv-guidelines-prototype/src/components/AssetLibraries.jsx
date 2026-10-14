@@ -193,7 +193,7 @@ function AssetImageGrid({ items, mode = "grid" }) {
                   rel="noopener noreferrer"
                   aria-label={t("Открыть обложку в полном размере: " + item.title)}
                 >
-                  <img src={rasterAsset(item.file)} alt={t(item.title)} loading="lazy" decoding="async" />
+                  <img src={rasterAsset(item.preview || item.file)} alt={t(item.title)} loading="lazy" decoding="async" />
                 </a>
               ) : (
                 <img src={rasterAsset(item.file)} alt={t(item.title)} loading="lazy" decoding="async" />

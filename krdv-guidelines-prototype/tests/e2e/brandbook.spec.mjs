@@ -444,8 +444,12 @@ test("ten current leaflet covers display uncropped and open full-size PNG", asyn
   await expect(first).toHaveAttribute("target", "_blank");
   const image = first.locator("img");
   await first.scrollIntoViewIfNeeded();
-  await expect.poll(() => image.evaluate((img) => img.complete && img.naturalWidth > 500)).toBe(true);
+  await expect.poll(() => image.evaluate((img) => img.complete && img.naturalWidth >= 400)).toBe(true);
   await expect(image).toHaveCSS("object-fit", "contain");
+  await expect(image).toHaveAttribute("src", /leaflet-[\w-]+-2026\.webp$/);
+  const previewResponse = await page.request.get(await image.getAttribute("src"));
+  expect(previewResponse.ok()).toBeTruthy();
+  expect(previewResponse.headers()["content-type"]).toContain("image/webp");
   const response = await page.request.get(await first.getAttribute("href"));
   expect(response.ok()).toBeTruthy();
   expect(response.headers()["content-type"]).toContain("image/png");
@@ -482,4 +486,55 @@ test("merch page shows its examples without an external board link or retired ca
     width: el.clientWidth, scrollWidth: el.scrollWidth,
   }));
   expect(viewport.scrollWidth).toBeLessThanOrEqual(viewport.width + 2);
+});
+
+test("mobile section navigation puts focus on the selected heading", async ({ page, isMobile }) => {
+  test.skip(!isMobile, "Only the mobile drawer changes focus ownership");
+  await page.goto("/#/logo");
+  await ready(page);
+  await page.locator(".mobile-menu-button").click();
+  await page.locator('.nav-group.is-open .nav-children button').filter({ hasText: "Охранное поле" }).click();
+  await expect(page).toHaveURL(/#\/logo\/clearspace$/);
+  await expect(page.locator("#clearspace h2")).toBeFocused();
+  await expect(page.locator(".guideline-shell")).not.toHaveClass(/nav-open/);
+});
+
+test("mobile subsection headers are not covered by the fixed menu", async ({ page, isMobile }) => {
+  test.skip(!isMobile, "This offset is only needed with the mobile menu");
+  await page.goto("/#/merch");
+  await ready(page);
+  await page.locator("#examples").evaluate((el) => el.scrollIntoView({ block: "start", behavior: "auto" }));
+  const rectangles = await page.evaluate(() => {
+    const menu = document.querySelector(".mobile-menu-button").getBoundingClientRect();
+    const header = document.querySelector("#examples h2").getBoundingClientRect();
+    return { menuBottom: menu.bottom, titleTop: header.top };
+  });
+  expect(rectangles.titleTop).toBeGreaterThanOrEqual(rectangles.menuBottom + 4);
+});
+
+test("all media assets remain available after scrolling through every section", async ({ page, browserName }) => {
+  test.skip(browserName !== "chromium", "Exhaustive lazy loading runs on both desktop/mobile Chromium; other engines cover routes separately");
+  const errors = [];
+  page.on("pageerror", (error) => errors.push(error.message));
+  for (const [route] of titles) {
+    await page.goto("/#/" + route);
+    await ready(page);
+    const sections = page.locator(".content-section");
+    const sectionCount = await sections.count();
+    expect(sectionCount).toBeGreaterThan(0);
+    for (let i = 0; i < sectionCount; i += 1) {
+      const section = sections.nth(i);
+      await section.scrollIntoViewIfNeeded();
+      const images = section.locator("img");
+      const count = await images.count();
+      for (let j = 0; j < count; j += 1) {
+        const image = images.nth(j);
+        await image.scrollIntoViewIfNeeded();
+        await expect.poll(() => image.evaluate((el) => el.complete && el.naturalWidth > 0), { timeout: 6000 }).toBe(true);
+      }
+    }
+    const overflow = await page.locator("#page").evaluate((el) => el.scrollWidth - el.clientWidth);
+    expect(overflow, "Horizontal overflow in " + route).toBeLessThanOrEqual(2);
+  }
+  expect(errors).toEqual([]);
 });

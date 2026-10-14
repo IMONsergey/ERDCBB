@@ -492,3 +492,9 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* Keep anchor destinations clear of the persistent mobile menu without shrinking titles. */
+@media (max-width: 860px) {
+  .page-scroll { scroll-padding-top: 72px; }
+  .content-section { scroll-margin-top: 72px; }
+}
