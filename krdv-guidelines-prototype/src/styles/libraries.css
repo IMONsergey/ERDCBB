@@ -730,3 +730,61 @@
   max-width: 120px;
   max-height: 166px;
 }
+
+/* Current approved leaflet covers: a quiet, uncropped 5-column editorial gallery. */
+.asset-image-grid.is-leaflets {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.asset-image-grid.is-leaflets .asset-image-card,
+.asset-image-grid.is-leaflets .asset-image-card:hover {
+  display: block;
+  border: 0;
+  background: transparent;
+}
+
+.asset-image-grid.is-leaflets .asset-image-frame {
+  width: 100%;
+  aspect-ratio: 0.47;
+  border: 1px solid var(--line);
+  background: #fff;
+  overflow: hidden;
+  transition: border-color var(--motion-fast) var(--ease-standard);
+}
+
+.asset-image-grid.is-leaflets .asset-image-card:hover .asset-image-frame,
+.asset-image-grid.is-leaflets .asset-image-frame:focus-within {
+  border-color: var(--line-active);
+}
+
+.asset-image-grid.is-leaflets .leaflet-cover-link {
+  display: block;
+  width: 100%;
+  height: 100%;
+  outline-offset: 2px;
+}
+
+.asset-image-grid.is-leaflets .leaflet-cover-link:focus-visible {
+  outline: 2px solid var(--blue);
+}
+
+.asset-image-grid.is-leaflets .asset-image-frame img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+@media (max-width: 1180px) {
+  .asset-image-grid.is-leaflets {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 860px) {
+  .asset-image-grid.is-leaflets {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+}

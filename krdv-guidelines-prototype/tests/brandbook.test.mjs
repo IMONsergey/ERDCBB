@@ -158,3 +158,32 @@ test("regional logo SVG sources remain byte-identical to the four supplied files
   assert.equal(downloadResources.madeFarEastSigns.url, "https://disk.yandex.ru/d/w1QaGJWiVcbf7Q");
 });
 
+
+
+test("updated leaflet gallery preserves all ten current originals byte for byte", () => {
+  const leaflets = pagesById.advertising.sections.find((section) => section.id === "leaflets");
+  const expected = {
+    "leaflet-tor-2026.png": "b21310b04d1f04d89ea2f67cfd22953f4e2eec78081540608398add420d92a93",
+    "leaflet-azrf-2026.png": "4e825a6cb54dd2fcac82a761fd3ca9134320c811d4367d29da477e0853a650eb",
+    "leaflet-sar-2026.png": "e7e3e51fb94902c141a4702a8bbc5403e184e47d3241506a5dea9781296129d8",
+    "leaflet-kurils-2026.png": "0efde8bd6fcface21583c3d7da7b4468945c8e6b1355023fd34842e67c0aed6f",
+    "leaflet-hectare-2026.png": "b5f1d3ab376c2768650daf78d1c1dd3651945a3adb22b11c98b0a720d71a1555",
+    "leaflet-mortgage-2026.png": "8ab8eafc05dab77c70565bfcfe919abc5e8388105389666f4d3ef47a7f147e8d",
+    "leaflet-work-dfo-2026.png": "5698998a648921d04b0011d92756778cb3ab126375d957d5462607d036fc2fef",
+    "leaflet-work-arctic-2026.png": "54a5cd841599f3bd2ef9ad3ea8ed896dcf9cc9f263a72ac0e1752924f95129e4",
+    "leaflet-primorye-2026.png": "ebc44f74ba2a1385a55b73ead2671607b5f0ff1082bdbabdb268b4b41c951d61",
+    "leaflet-khabarovsk-eao-2026.png": "147f6dbd85f69ae96b77b4595d0907775f435be46cd0ed89d280186b98c1f69d"
+};
+  assert.equal(leaflets.assetImageMode, "leaflets");
+  assert.equal(leaflets.assetImages.length, 10);
+  assert.deepEqual(
+    new Set(leaflets.assetImages.map((item) => item.file)),
+    new Set(Object.keys(expected))
+  );
+  for (const item of leaflets.assetImages) {
+    const file = path.join(publicRoot, "assets/brandbook/raster", item.file);
+    const data = readFileSync(file);
+    assert.equal(createHash("sha256").update(data).digest("hex"), expected[item.file], "Unexpected alteration of " + item.file);
+  }
+  assert.ok(!leaflets.assetImages.some((item) => /leaflets-layout-/.test(item.file)));
+});
