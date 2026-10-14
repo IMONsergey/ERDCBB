@@ -36,6 +36,11 @@ const downloadResources = {
     description: "Общий архив с версиями товарного знака.",
     url: "https://disk.yandex.ru/d/hwgUiBntRmelpA",
   },
+  madeFarEastSigns: {
+    title: "Знак «Сделано на Дальнем Востоке и в Арктике»",
+    description: "Оригинальные версии знака и дополнительные форматы для скачивания.",
+    url: "https://disk.yandex.ru/d/w1QaGJWiVcbf7Q",
+  },
   socialGuide: {
     title: "Гайд по социальным сетям",
     description: "Материалы и правила оформления социальных сетей.",
@@ -51,6 +56,7 @@ const allDownloadResourceKeys = [
   "subsidiaryLetterheads",
   "awards",
   "madeSigns",
+  "madeFarEastSigns",
   "socialGuide",
 ];
 
@@ -289,6 +295,16 @@ const madeSignVariants = [
   },
 }));
 
+const madeFarEastVariants = [
+  { slug: "made-dvia-ru-purple", title: "Русская фиолетовая версия", tone: "purple" },
+  { slug: "made-dvia-en-purple", title: "Английская фиолетовая версия", tone: "purple" },
+  { slug: "made-dvia-ru-black", title: "Русская черная версия", tone: "black" },
+  { slug: "made-dvia-en-black", title: "Английская черная версия", tone: "black" },
+].map((item) => ({
+  ...item,
+  preview: item.slug + ".svg",
+  files: { svg: item.slug + ".svg" },
+}));
 const madeBrandingImages = [
   { title: "Упаковка резидента", caption: "Знак размещается как подтверждение происхождения продукции.", file: "made-branding-1.webp" },
   { title: "Пищевая продукция", caption: "Маркировка работает на этикетке и поддерживает доверие к производителю.", file: "made-branding-2.webp" },
@@ -340,4 +356,4 @@ const logoBackgroundRuleImages = Array.from({ length: 8 }, (_, index) => ({
   embeddedText: true,
 }));
 
-export { downloadResources, allDownloadResourceKeys, logoFormats, regimeSignFormats, subsidiaryFormats, madeSignFormats, fontFamilies, logoVariants, subsidiaryLogos, subsidiaryLogoSets, regimeSignLogos, madeSignVariants, madeBrandingImages, photostyleImages, logoMisuseImages, logoBackgroundRuleImages };
+export { downloadResources, allDownloadResourceKeys, logoFormats, regimeSignFormats, subsidiaryFormats, madeSignFormats, fontFamilies, logoVariants, subsidiaryLogos, subsidiaryLogoSets, regimeSignLogos, madeSignVariants, madeFarEastVariants, madeBrandingImages, photostyleImages, logoMisuseImages, logoBackgroundRuleImages };
