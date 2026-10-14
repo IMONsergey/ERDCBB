@@ -180,6 +180,9 @@ function App() {
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     target?.scrollIntoView({ block: "start", behavior: reducedMotion ? "auto" : "smooth" });
     setMenuOpen(false);
+    window.requestAnimationFrame(() => {
+      target?.querySelector("h2")?.focus({ preventScroll: true });
+    });
   }
 
   return (

@@ -47,7 +47,7 @@ function ContentSection({ section, navigate, activePageId }) {
   return (
     <section className="content-section" id={section.id}>
       <div className="section-title">
-        <h2>{t(section.title)}</h2>
+        <h2 tabIndex={-1}>{t(section.title)}</h2>
       </div>
       <div className="section-body">
         {section.lead ? <p className="lead-copy">{t(section.lead)}</p> : null}
