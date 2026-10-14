@@ -453,7 +453,7 @@ test("ten current leaflet covers display uncropped and open full-size PNG", asyn
   expect(cols).toBe(isMobile ? 2 : 5);
 });
 
-test("merch page presents real examples from working Miro board without retired cards", async ({ page, isMobile }) => {
+test("merch page shows its examples without an external board link or retired cards", async ({ page, isMobile }) => {
   await page.goto("/#/merch");
   await ready(page);
   const section = page.locator("#examples");
