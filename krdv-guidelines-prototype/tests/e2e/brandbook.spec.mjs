@@ -401,3 +401,31 @@ test("new light-cover headings preserve readable dark ink", async ({ page }) => 
   expect(metrics.numberVisible).toBe(true);
   expect(metrics.titleVisible).toBe(true);
 });
+
+test("regional Far East and Arctic marks render, link and download", async ({ page }) => {
+  await page.goto("/#/made");
+  await ready(page);
+  const section = page.locator("#made-far-east");
+  await expect(section).toHaveCount(1);
+  await expect(section.locator(".made-sign-card")).toHaveCount(4);
+  await expect(section.getByRole("link", { name: /Открыть архив/ })).toHaveAttribute("href", "https://disk.yandex.ru/d/w1QaGJWiVcbf7Q");
+  await expect(page.locator("#sign .made-sign-card")).toHaveCount(7);
+  for (const card of await section.locator(".made-sign-card").all()) {
+    await card.scrollIntoViewIfNeeded();
+    const img = card.locator(".made-sign-preview img");
+    await expect.poll(() => img.evaluate((el) => el.complete && el.naturalWidth > 0)).toBeTruthy();
+    const links = card.locator(".logo-downloads a");
+    await expect(links).toHaveCount(1);
+    const href = await links.first().getAttribute("href");
+    expect(href).toMatch(/made-dvia-(?:ru|en)-(?:purple|black)\.svg$/);
+    const response = await page.request.get(href);
+    expect(response.ok()).toBeTruthy();
+    expect(await response.text()).toContain("<svg");
+  }
+  for (const card of await section.locator('.made-sign-card[data-tone="black"]').all()) {
+    const preview = card.locator(".made-sign-preview");
+    await expect(preview).toHaveCSS("background-color", "rgb(66, 66, 66)");
+    await expect(preview.locator("img")).toHaveCSS("outline-style", "solid");
+  }
+});
+

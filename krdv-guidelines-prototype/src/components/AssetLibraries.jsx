@@ -1,5 +1,5 @@
 import { motion } from "motion/react";
-import { rasterAsset, logoAsset, regimeSignAsset, subsidiaryAsset, madeSignAsset, ICONS, t, downloadResources, logoFormats, regimeSignFormats, subsidiaryFormats, madeSignFormats, logoVariants, subsidiaryLogoSets, regimeSignLogos, madeSignVariants } from "../data/brandbook.js";
+import { rasterAsset, logoAsset, regimeSignAsset, subsidiaryAsset, madeSignAsset, ICONS, t, downloadResources, logoFormats, regimeSignFormats, subsidiaryFormats, madeSignFormats, logoVariants, subsidiaryLogoSets, regimeSignLogos, madeSignVariants, madeFarEastVariants } from "../data/brandbook.js";
 import { UiIcon } from "./UiIcon.jsx";
 
 function LogoLibrary({ items }) {
@@ -112,11 +112,12 @@ function RegimeSignLibrary() {
   );
 }
 
-function MadeSignLibrary() {
+function MadeSignLibrary({ variantSet = "tor-spv" }) {
+  const isFarEast = variantSet === "far-east";
+  const items = isFarEast ? madeFarEastVariants : madeSignVariants;
   return (
-    
-      <motion.div className="made-sign-library">
-        {madeSignVariants.map((item) => (
+    <motion.div className={"made-sign-library" + (isFarEast ? " is-far-east" : "")}>
+        {items.map((item) => (
           <motion.article className="made-sign-card" data-tone={item.tone} key={item.slug} whileHover={{ y: -2 }}>
             <div className="made-sign-preview">
               <img src={madeSignAsset(item.preview)} alt={t(item.title)} loading="lazy" decoding="async" />
@@ -127,7 +128,7 @@ function MadeSignLibrary() {
               <div className="logo-downloads" role="group" aria-label={t(`Скачать ${item.title}`)}>
                 <strong>{t("Скачать")}</strong>
                 <div>
-                  {madeSignFormats.map((format) => (
+                  {madeSignFormats.filter((format) => item.files[format]).map((format) => (
                     <LogoDownloadLink key={format} file={item.files[format]} format={format} title={item.title} asset={madeSignAsset} />
                   ))}
                 </div>
