@@ -429,3 +429,26 @@ test("regional Far East and Arctic marks render, link and download", async ({ pa
   }
 });
 
+
+test("ten current leaflet covers display uncropped and open full-size PNG", async ({ page, isMobile }) => {
+  await page.goto("/#/advertising");
+  await ready(page);
+  const gallery = page.locator("#leaflets .asset-image-grid.is-leaflets");
+  await expect(gallery).toHaveCount(1);
+  const covers = gallery.locator(".asset-image-card");
+  await expect(covers).toHaveCount(10);
+  await expect(page.locator("#leaflets .asset-image-grid.is-stack")).toHaveCount(0);
+  const links = gallery.locator("a.leaflet-cover-link");
+  await expect(links).toHaveCount(10);
+  const first = links.first();
+  await expect(first).toHaveAttribute("target", "_blank");
+  const image = first.locator("img");
+  await first.scrollIntoViewIfNeeded();
+  await expect.poll(() => image.evaluate((img) => img.complete && img.naturalWidth > 500)).toBe(true);
+  await expect(image).toHaveCSS("object-fit", "contain");
+  const response = await page.request.get(await first.getAttribute("href"));
+  expect(response.ok()).toBeTruthy();
+  expect(response.headers()["content-type"]).toContain("image/png");
+  const cols = await gallery.evaluate((el) => getComputedStyle(el).gridTemplateColumns.split(" ").filter(Boolean).length);
+  expect(cols).toBe(isMobile ? 2 : 5);
+});

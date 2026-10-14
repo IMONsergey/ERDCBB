@@ -176,7 +176,8 @@ function ResourceLinks({ keys }) {
 }
 
 function AssetImageGrid({ items, mode = "grid" }) {
-  const imagesOnly = mode === "imagesOnly" || mode === "stack";
+  const isLeafletGallery = mode === "leaflets";
+  const imagesOnly = mode === "imagesOnly" || mode === "stack" || isLeafletGallery;
 
   return (
     
@@ -184,7 +185,19 @@ function AssetImageGrid({ items, mode = "grid" }) {
         {items.map((item) => (
           <motion.article className={`asset-image-card ${item.wide ? "is-wide" : ""} ${item.contained ? "is-contained" : ""} ${item.embeddedText ? "has-embedded-text" : ""}`} key={item.file}>
             <div className="asset-image-frame">
-              <img src={rasterAsset(item.file)} alt={t(item.title)} loading="lazy" decoding="async" />
+              {isLeafletGallery ? (
+                <a
+                  className="leaflet-cover-link"
+                  href={rasterAsset(item.file)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={t("Открыть обложку в полном размере: " + item.title)}
+                >
+                  <img src={rasterAsset(item.file)} alt={t(item.title)} loading="lazy" decoding="async" />
+                </a>
+              ) : (
+                <img src={rasterAsset(item.file)} alt={t(item.title)} loading="lazy" decoding="async" />
+              )}
             </div>
             {item.embeddedText || imagesOnly ? null : (
               <div className="asset-image-copy">
