@@ -453,7 +453,7 @@ test("ten current leaflet covers display uncropped and open full-size PNG", asyn
   expect(cols).toBe(isMobile ? 2 : 5);
 });
 
-test("merch page presents real examples from working Miro board without retired cards", async ({ page, isMobile }) => {
+test("merch page shows its examples without an external board link or retired cards", async ({ page, isMobile }) => {
   await page.goto("/#/merch");
   await ready(page);
   const section = page.locator("#examples");
@@ -464,9 +464,7 @@ test("merch page presents real examples from working Miro board without retired 
     await expect(page.locator("#" + id)).toHaveCount(0);
   }
   await expect(section.locator(".merch-gallery-card")).toHaveCount(12);
-  const miro = section.getByRole("link", { name: /Все материалы в Miro/ });
-  await expect(miro).toHaveAttribute("href", "https://miro.com/app/board/uXjVONM6M_s=/?share_link_id=455530323654");
-  await expect(miro).toHaveAttribute("target", "_blank");
+  await expect(section.locator('a[href*="miro.com"]')).toHaveCount(0);
   const first = section.locator(".merch-gallery-card").first();
   await first.scrollIntoViewIfNeeded();
   const img = first.locator("img");

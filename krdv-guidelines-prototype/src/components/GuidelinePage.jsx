@@ -72,7 +72,7 @@ function ContentSection({ section, navigate, activePageId }) {
         {section.madeSigns ? <MadeSignLibrary /> : null}
         {section.madeFarEastSigns ? <MadeSignLibrary variantSet="far-east" /> : null}
         {section.assetImages ? <AssetImageGrid items={section.assetImages} mode={section.assetImageMode} /> : null}
-        {section.merchGallery ? <MerchGallery items={section.merchGallery} boardUrl={section.merchBoard} /> : null}
+        {section.merchGallery ? <MerchGallery items={section.merchGallery} /> : null}
         {cardsAfterAssets ? <CardGrid items={section.cards} /> : null}
         {section.photoCredit ? (
           <footer className="photo-credit" aria-label={t("Сведения об авторе фотографии")}>

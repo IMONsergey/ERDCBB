@@ -197,7 +197,7 @@ test("current merch is a working reference gallery, not a fixed catalog", () => 
   assert.equal(merch.sections.length, 1);
   const examples = merch.sections[0];
   assert.equal(examples.id, "examples");
-  assert.equal(examples.merchBoard, "https://miro.com/app/board/uXjVONM6M_s=/?share_link_id=455530323654");
+  assert.equal(examples.merchBoard, undefined);
   assert.ok(examples.paragraphs.some((text) => text.includes("актуализируется ДВК")));
   assert.ok(examples.paragraphs.some((text) => text.includes("пожелания")));
   assert.equal(examples.merchGallery.length, 12);

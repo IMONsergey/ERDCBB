@@ -816,20 +816,6 @@
   text-transform: uppercase;
 }
 
-.merch-showcase-toolbar > a {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  min-height: 40px;
-  border-bottom: 1px solid currentColor;
-  color: var(--blue);
-  font-size: 14px;
-  text-decoration: none;
-}
-
-.merch-showcase-toolbar > a:hover,
-.merch-showcase-toolbar > a:focus-visible { color: #003c73; }
-
 .merch-gallery {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));

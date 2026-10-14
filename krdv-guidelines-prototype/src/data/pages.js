@@ -452,7 +452,6 @@ const pagesData = [
           "Представленные изображения — примеры мерча, а не окончательно утвержденный ассортимент. Мерч разрабатывается и актуализируется ДВК.",
           "Предложения и пожелания по брендированной продукции можно направлять команде ДВК.",
         ],
-        merchBoard: "https://miro.com/app/board/uXjVONM6M_s=/?share_link_id=455530323654",
         merchGallery: [
           { title: "Ручка для дочерних обществ", file: "merch-slide-03.jpg", preview: "merch-slide-03.webp" },
           { title: "Ежедневник для дочерних обществ", file: "merch-slide-05.jpg", preview: "merch-slide-05.webp" },
